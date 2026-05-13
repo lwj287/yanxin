@@ -1,0 +1,25 @@
+{
+  "name": "yanxin-miniapp-workspace",
+  "private": true,
+  "scripts": {
+    "dev:zhaoxianbao": "npm run dev:mp-weixin --workspace=apps/zhaoxianbao",
+    "dev:xueyuan": "npm run dev:mp-weixin --workspace=apps/xueyuan",
+    "build:zhaoxianbao": "npm run build:mp-weixin --workspace=apps/zhaoxianbao",
+    "build:xueyuan": "npm run build:mp-weixin --workspace=apps/xueyuan",
+    "dev:zhipaidan": "npm run dev:mp-weixin --workspace=apps/zhipaidan",
+    "build:zhipaidan": "npm run build:mp-weixin --workspace=apps/zhipaidan",
+    "dev:zhijian": "npm run dev:mp-weixin --workspace=apps/zhijian",
+    "build:zhijian": "npm run build:mp-weixin --workspace=apps/zhijian",
+    "dev:anxinbao": "npm run dev:mp-weixin --workspace=apps/anxinbao",
+    "build:anxinbao": "npm run build:mp-weixin --workspace=apps/anxinbao",
+    "dev:bi": "npm run dev:mp-weixin --workspace=apps/bi",
+    "build:bi": "npm run build:mp-weixin --workspace=apps/bi",
+    "dev:suoguanjia": "npm run dev:mp-weixin --workspace=apps/suoguanjia",
+    "build:suoguanjia": "npm run build:mp-weixin --workspace=apps/suoguanjia",
+    "dev:keyingmen": "npm run dev:mp-weixin --workspace=apps/keyingmen",
+    "build:keyingmen": "npm run build:mp-weixin --workspace=apps/keyingmen"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
+}

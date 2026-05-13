@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: anxinbao
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yanxin_anxinbao?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: lwj20010224 # 请根据实际情况修改
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: isDeleted # 全局逻辑删除字段名
+      logic-delete-value: 1 # 逻辑已删除值
+      logic-not-delete-value: 0 # 逻辑未删除值
+  configuration:
+    map-underscore-to-camel-case: true # 开启驼峰命名转换
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印SQL日志
+
+jwt:
+  secret: YW54aW5iYW9fc2VjcmV0X2tleV8yMDI2X2FkbWluX3Rva2VuX3NpZ25hdHVyZQ== # base64
+  expiration: 86400000 # 24小时

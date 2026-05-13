@@ -1,0 +1,25 @@
+{
+  "name": "yanxin-frontend-workspace",
+  "private": true,
+  "scripts": {
+    "dev:zhaoxianbao": "npm run dev --workspace=apps/zhaoxianbao",
+    "dev:xueyuan": "npm run dev --workspace=apps/xueyuan",
+    "build:zhaoxianbao": "npm run build --workspace=apps/zhaoxianbao",
+    "build:xueyuan": "npm run build --workspace=apps/xueyuan",
+    "dev:zhipaidan": "npm run dev --workspace=apps/zhipaidan",
+    "build:zhipaidan": "npm run build --workspace=apps/zhipaidan",
+    "dev:zhijian": "npm run dev --workspace=apps/zhijian",
+    "build:zhijian": "npm run build --workspace=apps/zhijian",
+    "dev:anxinbao": "npm run dev --workspace=apps/anxinbao",
+    "build:anxinbao": "npm run build --workspace=apps/anxinbao",
+    "dev:bi": "npm run dev --workspace=apps/bi",
+    "build:bi": "npm run build --workspace=apps/bi",
+    "dev:suoguanjia": "npm run dev --workspace=apps/suoguanjia",
+    "build:suoguanjia": "npm run build --workspace=apps/suoguanjia",
+    "dev:keyingmen": "npm run dev --workspace=apps/keyingmen",
+    "build:keyingmen": "npm run build --workspace=apps/keyingmen"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
+}

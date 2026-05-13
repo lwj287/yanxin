@@ -1,0 +1,142 @@
+:root {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #333333;
+  --muted: #86909c;
+  --primary: #409eff;
+  --border: #ebeef5;
+}
+
+* { box-sizing: border-box; }
+html, body, #app { height: 100%; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Segoe UI", Arial, Roboto, "PingFang SC", "miui", "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.page-wrap { padding: 24px; background: transparent; }
+.header-action {
+  margin-bottom: 24px;
+  background: #ffffff;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+.list-container {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  margin-bottom: 24px;
+}
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  background: #ffffff;
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+.page-card {
+  border-radius: 16px;
+  border: none !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  background: #fff;
+}
+.page-card .el-card__header {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+}
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.page-title { font-size: 18px; font-weight: 600; color: #1d2129; }
+.page-subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.toolbar:last-child { margin-bottom: 0; }
+
+.query-row { margin-bottom: 16px; }
+.query-left {
+  justify-content: flex-start;
+  align-items: center;
+}
+.query-btn {
+  width: auto;
+  min-width: 80px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Element Plus overrides */
+:root {
+  --el-border-color: #ebeef5 !important;
+  --el-border-color-light: #f2f3f5 !important;
+  --el-fill-color-blank: #ffffff !important;
+  --el-text-color-primary: #1d2129 !important;
+  --el-text-color-regular: #4e5969 !important;
+  --el-bg-color: #ffffff !important;
+  --el-bg-color-page: #f5f7fa !important;
+}
+
+.el-table { 
+  border-radius: 8px; 
+  overflow: hidden; 
+  --el-table-border-color: var(--border);
+  --el-table-header-bg-color: #f5f7fa;
+  --el-table-header-text-color: #4e5969;
+}
+.el-table th.el-table__cell { font-weight: 600; height: 48px; background: #f5f7fa !important; }
+.el-table th.el-table__cell .cell,
+.el-table td.el-table__cell .cell { text-align: left; padding: 0 16px; }
+.el-table td.el-table__cell .cell { white-space: nowrap; color: #1d2129; }
+.el-table tr { transition: background-color .2s; }
+.el-table__body tr:hover > td.el-table__cell { background: #ecf5ff !important; }
+.el-pagination { margin-top: 20px; justify-content: flex-end; }
+.el-button { border-radius: 12px; }
+
+.el-input__wrapper,
+.el-select__wrapper,
+.el-textarea__inner,
+.el-input-number {
+  border-radius: 12px !important;
+  box-shadow: 0 0 0 1px #e5e6eb inset !important;
+}
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focus,
+.el-textarea__inner:focus {
+  box-shadow: 0 0 0 1px var(--primary) inset !important;
+}
+
+.el-dialog {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+.el-dialog__header {
+  border-bottom: 1px solid var(--border);
+  margin-right: 0 !important;
+  padding: 20px 24px !important;
+}
+.el-dialog__title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1d2129;
+}
+.el-dialog__footer {
+  border-top: 1px solid var(--border);
+  padding: 16px 24px !important;
+}
+
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1px solid transparent;
+  line-height: 1.5;
+}
+.status-success { color: #67c23a; background: #f0f9eb; border-color: #e1f3d8; }
+.status-warn { color: #fa8c16; background: #fff7e6; border-color: #ffd591; }
+.status-danger { color: #f5222d; background: #fff1f0; border-color: #ffa39e; }
+.status-info { color: #1890ff; background: #e6f7ff; border-color: #91d5ff; }

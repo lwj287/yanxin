@@ -1,0 +1,9 @@
+package com.yanxin.zhijian.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yanxin.zhijian.entity.ServiceType;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface ServiceTypeMapper extends BaseMapper<ServiceType> {
+}
