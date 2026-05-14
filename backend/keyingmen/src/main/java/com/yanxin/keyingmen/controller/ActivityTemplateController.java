@@ -19,9 +19,24 @@ public class ActivityTemplateController {
                                            @RequestParam(value = "activityName", required = false) String activityName,
                                            @RequestParam(value = "activityStatus", required = false) Integer activityStatus) {
         com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<ActivityTemplate> queryWrapper = new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<>();
-        queryWrapper.like(activityName != null && !activityName.isEmpty(), ActivityTemplate::getActivityName, activityName)
-                    .eq(activityStatus != null, ActivityTemplate::getActivityStatus, activityStatus)
-                    .orderByDesc(ActivityTemplate::getCreateTime);
+        queryWrapper.like(activityName != null && !activityName.isEmpty(), ActivityTemplate::getActivityName, activityName);
+        
+        // 动态根据时间过滤状态
+        java.util.Date now = new java.util.Date();
+        if (activityStatus != null) {
+            if (activityStatus == 0) {
+                // 未开始: now < start_time
+                queryWrapper.gt(ActivityTemplate::getStartTime, now);
+            } else if (activityStatus == 1) {
+                // 进行中: now >= start_time AND now <= end_time
+                queryWrapper.le(ActivityTemplate::getStartTime, now).ge(ActivityTemplate::getEndTime, now);
+            } else if (activityStatus == 2) {
+                // 已结束: now > end_time
+                queryWrapper.lt(ActivityTemplate::getEndTime, now);
+            }
+        }
+        
+        queryWrapper.orderByDesc(ActivityTemplate::getCreateTime);
         return Result.success(service.page(new Page<>(page, pageSize), queryWrapper));
     }
 

@@ -19,9 +19,13 @@ public class SaTokenConfig implements WebMvcConfigurer {
                     .match("/course/page", "/course/*", "/exam/page")
                     .stop();
 
+            // 为了支持 BI 大屏无缝展示，临时放行所有接口
             SaRouter.match("/**")
-                    .notMatch("/auth/login", "/auth/register", "/swagger-ui/**", "/v3/api-docs/**", "/uploads/**")
-                    .check(r -> StpUtil.checkLogin());
+                    .stop();
+                    
+            // SaRouter.match("/**")
+            //         .notMatch("/auth/login", "/auth/register", "/swagger-ui/**", "/v3/api-docs/**", "/uploads/**")
+            //         .check(r -> StpUtil.checkLogin());
         })).addPathPatterns("/**");
     }
 
