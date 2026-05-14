@@ -236,6 +236,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .page-wrap {
   background: transparent;
+  padding: 24px;
 }
 .right-stack {
   display: flex;
@@ -245,7 +246,7 @@ onBeforeUnmount(() => {
 .stat-card {
   background: #ffffff;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 20px 24px;
   display: flex;
   flex-direction: column;
@@ -262,7 +263,7 @@ onBeforeUnmount(() => {
   color: #1d2129;
 }
 .panel-card {
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid var(--border);
   background: #ffffff;
   box-shadow: none;

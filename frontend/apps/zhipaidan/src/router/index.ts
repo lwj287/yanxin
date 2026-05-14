@@ -15,7 +15,7 @@ const routes = [
       },
       {
         path: 'dispatch',
-        name: 'dispatch',
+        name: 'Dispatch',
         component: () => import('@/views/dispatch/index.vue'),
         meta: { title: '待派订单' }
       },

@@ -5,8 +5,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: Layout,
-    redirect: '/member',
+    redirect: '/dashboard',
     children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: { title: '首页概览' }
+      },
       {
         path: 'member',
         name: 'Member',
@@ -30,12 +36,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Order',
         component: () => import('@/views/order/index.vue'),
         meta: { title: '订单管理' }
-      },
-      {
-        path: 'dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/dashboard/index.vue'),
-        meta: { title: '数据看板' }
       }
     ]
   }

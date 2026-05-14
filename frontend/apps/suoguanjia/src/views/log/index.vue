@@ -23,12 +23,28 @@
           </template>
         </el-table-column>
         <el-table-column prop="action" label="具体动作" min-width="180" align="center" />
-        <el-table-column prop="content" label="详细内容(JSON)" min-width="400">
+        <el-table-column label="设备名称" min-width="160" align="center">
           <template #default="{ row }">
-            <pre class="json-content">{{ JSON.stringify(row.content, null, 2) }}</pre>
+            {{ getDeviceName(row.deviceId) }}
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="记录时间" min-width="200" align="center" />
+        <el-table-column label="设备序列号(SN)" min-width="160" align="center">
+          <template #default="{ row }">
+            {{ getDeviceSn(row.deviceId) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="content" label="详细内容" min-width="400">
+          <template #default="{ row }">
+            <span v-if="row.content && row.content.msg">{{ row.content.msg }}</span>
+            <span v-else-if="row.content && row.content.faultCode">检测到硬件故障，错误码: {{ row.content.faultCode }}</span>
+            <span v-else class="text-gray">操作成功</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="记录时间" min-width="180" align="center">
+          <template #default="{ row }">
+            {{ row.createTime ? row.createTime.replace('T', ' ') : '-' }}
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -44,7 +60,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { getLogList, DeviceLog } from '@/api/suoguanjia'
+import { getLogList, DeviceLog, getDeviceList, DeviceInfo } from '@/api/suoguanjia'
 
 // 绑定在输入框和下拉框上的表单数据
 const searchForm = ref({ action: '', logType: '' as number | '' })
@@ -54,6 +70,7 @@ const activeQuery = ref({ action: '', logType: '' as number | '' })
 
 const allData = ref<DeviceLog[]>([])
 const tableData = ref<DeviceLog[]>([])
+const deviceList = ref<DeviceInfo[]>([])
 const loading = ref(false)
 let timer: any = null
 
@@ -69,6 +86,21 @@ const fetchData = async (showLoading = false) => {
   } finally {
     if (showLoading) loading.value = false
   }
+}
+
+const fetchDevices = async () => {
+  const res = await getDeviceList()
+  deviceList.value = res || []
+}
+
+const getDeviceSn = (deviceId: number) => {
+  const device = deviceList.value.find(d => d.id === deviceId)
+  return device ? device.deviceSn : '-'
+}
+
+const getDeviceName = (deviceId: number) => {
+  const device = deviceList.value.find(d => d.id === deviceId)
+  return device ? device.deviceName : '-'
 }
 
 // 点击查询按钮时，将当前表单的值同步给 activeQuery，并执行过滤
@@ -94,7 +126,8 @@ const handleReset = () => {
 
 onMounted(() => {
   fetchData(true)
-  timer = setInterval(() => fetchData(false), 5000)
+  fetchDevices()
+  timer = setInterval(() => fetchData(false), 5000) // 每5秒自动刷新
 })
 
 onUnmounted(() => {

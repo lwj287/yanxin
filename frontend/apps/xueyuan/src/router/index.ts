@@ -11,8 +11,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'Layout',
     component: () => import('@/layout/index.vue'),
-    redirect: '/course',
+    redirect: '/dashboard',
     children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: { title: '首页概览' }
+      },
       {
         path: 'course',
         name: 'CourseList',
@@ -36,12 +42,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'UserManage',
         component: () => import('@/views/user/index.vue'),
         meta: { title: '学员管理' }
-      },
-      {
-        path: 'statistics',
-        name: 'Statistics',
-        component: () => import('@/views/statistics/index.vue'),
-        meta: { title: '数据统计' }
       }
     ]
   }
@@ -54,12 +54,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = (to.meta.title as string) || '燕鑫学院'
-  const token = localStorage.getItem('token')
-  if (!token && to.path !== '/login') {
-    next('/login')
-  } else {
-    next()
-  }
+  // const token = localStorage.getItem('token')
+  // if (!token && to.path !== '/login') {
+  //   next('/login')
+  // } else {
+  //   next()
+  // }
+  next()
 })
 
 export default router

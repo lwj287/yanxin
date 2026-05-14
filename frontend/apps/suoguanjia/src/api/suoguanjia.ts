@@ -18,8 +18,9 @@ export interface DeviceUserRel {
   userId: number
   userName: string
   authType: number
-  validStartTime: string
-  validEndTime: string
+  validStartTime: string | null
+  validEndTime: string | null
+  createTime: string
 }
 
 export interface DeviceLog {
@@ -51,10 +52,30 @@ export function getAuthList() {
   return request.get<DeviceUserRel[]>('/suoguanjia/deviceuserrel/list')
 }
 
+export function addAuth(data: Partial<DeviceUserRel>) {
+  return request.post('/suoguanjia/deviceuserrel/add', data)
+}
+
+export function revokeAuth(id: number) {
+  return request.delete(`/suoguanjia/deviceuserrel/revoke/${id}`)
+}
+
 export function getLogList() {
   return request.get<DeviceLog[]>('/suoguanjia/devicelog/list')
 }
 
-export function remoteUnlock(deviceId: number, userId: number) {
-  return request.post<boolean>('/suoguanjia/control/unlock', { deviceId, userId })
+export function remoteUnlock(deviceId: number, operatorId: number) {
+  return request.post('/suoguanjia/control/unlock', { deviceId, operatorId })
+}
+
+export function lockDevice(deviceId: number, operatorId: number) {
+  return request.post('/suoguanjia/control/lock', { deviceId, operatorId })
+}
+
+export function rebootDevice(deviceId: number, operatorId: number) {
+  return request.post('/suoguanjia/control/reboot', { deviceId, operatorId })
+}
+
+export function applyRepair(deviceId: number, operatorId: number) {
+  return request.post('/suoguanjia/control/repair', { deviceId, operatorId })
 }

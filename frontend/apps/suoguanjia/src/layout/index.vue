@@ -14,19 +14,19 @@
         text-color="#303133"
         active-text-color="#409eff"
       >
-        <el-menu-item index="/suoguanjia/dashboard">
+        <el-menu-item index="/dashboard">
           <el-icon><DataAnalysis /></el-icon>
           <span>首页概览</span>
         </el-menu-item>
-        <el-menu-item index="/suoguanjia/device">
+        <el-menu-item index="/device">
             <el-icon><Monitor /></el-icon>
             <span>设备管理</span>
           </el-menu-item>
-          <el-menu-item index="/suoguanjia/auth">
+          <el-menu-item index="/auth">
             <el-icon><Key /></el-icon>
             <span>权限分配</span>
           </el-menu-item>
-          <el-menu-item index="/suoguanjia/log">
+          <el-menu-item index="/log">
             <el-icon><Document /></el-icon>
             <span>操作日志</span>
           </el-menu-item>

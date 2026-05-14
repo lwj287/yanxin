@@ -43,7 +43,7 @@ request.interceptors.response.use(
     else if (res.code === 401) {
       ElMessage.error('登录状态已过期，请重新登录')
       localStorage.removeItem('token')
-      router.push('/login')
+      // router.push('/login')
       return Promise.reject(new Error(res.message))
     } 
     // 其他错误
@@ -58,7 +58,7 @@ request.interceptors.response.use(
     if (status === 401) {
       ElMessage.error('登录状态已过期，请重新登录')
       localStorage.removeItem('token')
-      router.push('/login')
+      // router.push('/login')
     } else {
       ElMessage.error(error.message || '网络请求异常，请稍后再试')
     }

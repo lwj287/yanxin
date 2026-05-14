@@ -1,5 +1,5 @@
 <template>
-  <div class="statistics-container">
+  <div class="dashboard-container">
     <el-row :gutter="24">
       <el-col :span="6" v-for="(item, index) in statCards" :key="index">
         <el-card shadow="never" class="stat-card">
@@ -181,7 +181,9 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-.statistics-container {
+.dashboard-container {
+  padding: 24px;
+  
   .stat-card {
     border: none;
     border-radius: 16px;

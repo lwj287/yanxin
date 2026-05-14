@@ -10,10 +10,10 @@ export default defineConfig({
     }
   },
   server: {
-    port: 3005,
+    port: 3006,
     proxy: {
       '/zhipaidan': {
-        target: 'http://localhost:8085',
+        target: 'http://localhost:8086',
         changeOrigin: true
       }
     }

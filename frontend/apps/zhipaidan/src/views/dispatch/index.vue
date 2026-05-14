@@ -1,5 +1,6 @@
 <template>
-  <div class="workbench-container">
+  <div class="page-wrap">
+    <div class="workbench-container">
     <div class="main-content">
       <div class="left-panel">
         <div class="panel-header">
@@ -95,6 +96,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -264,6 +266,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.page-wrap {
+  padding: 24px;
+}
+
 .workbench-container {
   height: calc(100vh - 100px);
   display: flex;

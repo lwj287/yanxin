@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="page-wrap">
     <div class="search-bar">
       <el-form :inline="true" :model="searchForm">
         <el-form-item label="订单ID">
@@ -22,42 +22,42 @@
       </el-form>
     </div>
 
-    <el-table 
-      :data="tableData" 
-      border 
-      stripe 
-      :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
-      style="width: 100%"
-    >
-      <el-table-column prop="orderId" label="订单ID" min-width="100" align="center" />
-      <el-table-column prop="memberName" label="会员姓名" min-width="120" align="center" />
-      <el-table-column prop="serviceItem" label="服务项目" min-width="150" align="center" />
-      <el-table-column prop="totalAmount" label="总金额(元)" min-width="100" align="center" />
-      <el-table-column prop="pointDiscountAmount" label="积分抵扣(元)" min-width="120" align="center" />
-      <el-table-column prop="couponDiscountAmount" label="优惠券抵扣(元)" min-width="120" align="center" />
-      <el-table-column prop="payAmount" label="实际支付(元)" min-width="100" align="center" />
-      <el-table-column prop="payMethod" label="支付方式" min-width="100" align="center">
-        <template #default="scope">
-          <span v-if="scope.row.payMethod === 1">微信</span>
-          <span v-else-if="scope.row.payMethod === 2">支付宝</span>
-          <span v-else-if="scope.row.payMethod === 3">余额</span>
-          <span v-else>-</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="payStatus" label="状态" min-width="100" align="center">
-        <template #default="scope">
-          <el-tag v-if="scope.row.payStatus === 0" type="warning">待支付</el-tag>
-          <el-tag v-else-if="scope.row.payStatus === 1" type="success">已支付</el-tag>
-          <el-tag v-else type="info">已取消</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="payTime" label="支付时间" min-width="180" align="center" />
-      <el-table-column label="操作" min-width="120" fixed="right" align="center">
-        <template #default="scope">
-          <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="table-wrapper">
+      <el-table 
+        :data="tableData" 
+        stripe 
+        style="width: 100%"
+      >
+        <el-table-column prop="orderId" label="订单ID" min-width="100" align="center" />
+        <el-table-column prop="memberName" label="会员姓名" min-width="120" align="center" />
+        <el-table-column prop="serviceItem" label="服务项目" min-width="150" align="center" />
+        <el-table-column prop="totalAmount" label="总金额(元)" min-width="100" align="center" />
+        <el-table-column prop="pointDiscountAmount" label="积分抵扣(元)" min-width="120" align="center" />
+        <el-table-column prop="couponDiscountAmount" label="优惠券抵扣(元)" min-width="120" align="center" />
+        <el-table-column prop="payAmount" label="实际支付(元)" min-width="100" align="center" />
+        <el-table-column prop="payMethod" label="支付方式" min-width="100" align="center">
+          <template #default="scope">
+            <span v-if="scope.row.payMethod === 1">微信</span>
+            <span v-else-if="scope.row.payMethod === 2">支付宝</span>
+            <span v-else-if="scope.row.payMethod === 3">余额</span>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="payStatus" label="状态" min-width="100" align="center">
+          <template #default="scope">
+            <el-tag v-if="scope.row.payStatus === 0" type="warning">待支付</el-tag>
+            <el-tag v-else-if="scope.row.payStatus === 1" type="success">已支付</el-tag>
+            <el-tag v-else type="info">已取消</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="payTime" label="支付时间" min-width="180" align="center" />
+        <el-table-column label="操作" min-width="120" fixed="right" align="center">
+          <template #default="scope">
+            <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <div class="pagination-container" style="margin-top: 20px; display: flex; justify-content: flex-end;">
       <el-pagination
@@ -150,3 +150,53 @@ const handleDelete = async (row: any) => {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.page-wrap {
+  padding: 24px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: #ffffff;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  
+  :deep(.el-form-item) {
+    margin-bottom: 0;
+  }
+}
+
+.table-wrapper {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  margin-bottom: 24px;
+
+  :deep(.el-table) {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ebeef5;
+    
+    th.el-table__cell {
+      background-color: #f5f7fa;
+      color: #606266;
+      font-weight: 600;
+    }
+  }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  background: #ffffff;
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+</style>

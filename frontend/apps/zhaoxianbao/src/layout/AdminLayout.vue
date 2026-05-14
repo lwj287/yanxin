@@ -13,6 +13,10 @@
         text-color="#303133"
         active-text-color="#409eff"
       >
+        <el-menu-item index="/admin/dashboard">
+          <el-icon class="menu-icon"><DataAnalysis /></el-icon>
+          <span>首页概览</span>
+        </el-menu-item>
         <el-menu-item index="/admin/jobs">
           <el-icon class="menu-icon"><Briefcase /></el-icon>
           <span>岗位管理</span>
@@ -28,10 +32,6 @@
         <el-menu-item index="/admin/onboarding">
           <el-icon class="menu-icon"><UserFilled /></el-icon>
           <span>入职管理</span>
-        </el-menu-item>
-        <el-menu-item index="/admin/stats">
-          <el-icon class="menu-icon"><DataAnalysis /></el-icon>
-          <span>数据统计</span>
         </el-menu-item>
       </el-menu>
     </el-aside>

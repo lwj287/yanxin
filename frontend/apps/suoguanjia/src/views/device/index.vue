@@ -45,10 +45,29 @@
           </template>
         </el-table-column>
         <el-table-column prop="location" label="安装位置" min-width="180" align="center" />
-        <el-table-column prop="createTime" label="录入时间" min-width="180" align="center" />
-        <el-table-column label="操作" min-width="140" fixed="right" align="center">
+        <el-table-column label="录入时间" min-width="180" align="center">
+          <template #default="{ row }">
+            {{ row.createTime ? row.createTime.replace('T', ' ') : '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" min-width="260" fixed="right" align="center">
           <template #default="{ row }">
             <el-button link type="primary" size="small" @click="handleUnlock(row)" v-if="row.deviceType === 1 || row.deviceType === 2">远程开锁</el-button>
+            <el-popconfirm title="确定要锁定该设备吗？" @confirm="handleLock(row)">
+              <template #reference>
+                <el-button link type="danger" size="small">锁定</el-button>
+              </template>
+            </el-popconfirm>
+            <el-popconfirm title="确定要重启该设备吗？" @confirm="handleReboot(row)">
+              <template #reference>
+                <el-button link type="warning" size="small">重启</el-button>
+              </template>
+            </el-popconfirm>
+            <el-popconfirm title="确定要为该设备申请维修工单吗？" @confirm="handleRepair(row)">
+              <template #reference>
+                <el-button link type="primary" size="small">报修</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -67,7 +86,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getDeviceList, remoteUnlock, DeviceInfo } from '@/api/suoguanjia'
+import { getDeviceList, remoteUnlock, lockDevice, rebootDevice, applyRepair, DeviceInfo } from '@/api/suoguanjia'
 
 // 绑定在输入框和下拉框上的表单数据
 const searchForm = ref({ deviceName: '', deviceType: '' as number | '', status: '' as number | '' })
@@ -120,6 +139,36 @@ const handleUnlock = async (row: DeviceInfo) => {
     setTimeout(() => fetchData(false), 1000)
   } catch (e: any) {
     ElMessage.error(e.message || '开锁失败')
+  }
+}
+
+const handleLock = async (row: DeviceInfo) => {
+  try {
+    await lockDevice(row.id, 104)
+    ElMessage.success('设备已锁定')
+    setTimeout(() => fetchData(false), 1000)
+  } catch (e: any) {
+    ElMessage.error(e.message || '锁定失败')
+  }
+}
+
+const handleReboot = async (row: DeviceInfo) => {
+  try {
+    await rebootDevice(row.id, 104)
+    ElMessage.success('重启指令已下发')
+    setTimeout(() => fetchData(false), 1000)
+  } catch (e: any) {
+    ElMessage.error(e.message || '重启失败')
+  }
+}
+
+const handleRepair = async (row: DeviceInfo) => {
+  try {
+    await applyRepair(row.id, 104)
+    ElMessage.success('已自动生成报修工单')
+    setTimeout(() => fetchData(false), 1000)
+  } catch (e: any) {
+    ElMessage.error(e.message || '报修失败')
   }
 }
 

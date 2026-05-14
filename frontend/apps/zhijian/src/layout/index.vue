@@ -14,23 +14,23 @@
         text-color="#303133"
         active-text-color="#409eff"
       >
-        <el-menu-item index="/zhijian/dashboard">
+        <el-menu-item index="/dashboard">
           <el-icon><DataAnalysis /></el-icon>
           <span>首页概览</span>
         </el-menu-item>
-        <el-menu-item index="/zhijian/service-type">
+        <el-menu-item index="/service-type">
             <el-icon><Menu /></el-icon>
             <span>服务类型管理</span>
           </el-menu-item>
-          <el-menu-item index="/zhijian/template">
+          <el-menu-item index="/template">
             <el-icon><Document /></el-icon>
             <span>质检模板配置</span>
           </el-menu-item>
-          <el-menu-item index="/zhijian/task">
+          <el-menu-item index="/task">
             <el-icon><Monitor /></el-icon>
             <span>质检任务处理</span>
           </el-menu-item>
-          <el-menu-item index="/zhijian/appeal">
+          <el-menu-item index="/appeal">
             <el-icon><Warning /></el-icon>
             <span>申诉处理</span>
           </el-menu-item>

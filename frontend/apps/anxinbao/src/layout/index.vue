@@ -14,6 +14,10 @@
         text-color="#303133"
         active-text-color="#409eff"
       >
+        <el-menu-item index="/dashboard">
+          <el-icon><DataAnalysis /></el-icon>
+          <span>首页概览</span>
+        </el-menu-item>
         <el-menu-item index="/staff">
           <el-icon><User /></el-icon>
           <span>员工管理</span>
@@ -37,10 +41,6 @@
         <el-menu-item index="/claim">
           <el-icon><Warning /></el-icon>
           <span>理赔审核管理</span>
-        </el-menu-item>
-        <el-menu-item index="/statistics">
-          <el-icon><DataAnalysis /></el-icon>
-          <span>数据统计</span>
         </el-menu-item>
       </el-menu>
     </el-aside>

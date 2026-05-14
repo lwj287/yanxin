@@ -1,6 +1,6 @@
 <template>
-  <div class="page-container">
-    <div class="search-bar" style="display: flex; justify-content: space-between;">
+  <div class="page-wrap">
+    <div class="search-bar">
       <el-form :inline="true" :model="searchForm">
         <el-form-item label="活动名称">
           <el-input v-model="searchForm.name" placeholder="请输入活动名称" clearable />
@@ -20,40 +20,40 @@
       <el-button type="success" @click="handleAdd">创建活动</el-button>
     </div>
 
-    <el-table 
-      :data="tableData" 
-      border 
-      stripe 
-      :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
-      style="width: 100%"
-    >
-      <el-table-column prop="activityName" label="活动名称" align="center" min-width="150" />
-      <el-table-column prop="activityType" label="类型" min-width="100" align="center">
-        <template #default="scope">
-          {{ scope.row.activityType === 1 ? '赠送' : '抽奖' }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="activityStatus" label="状态" min-width="100" align="center">
-        <template #default="scope">
-          <el-tag v-if="scope.row.activityStatus === 0" type="info">未开始</el-tag>
-          <el-tag v-else-if="scope.row.activityStatus === 1" type="success">进行中</el-tag>
-          <el-tag v-else type="danger">已结束</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="活动时间" min-width="280" align="center">
-        <template #default="scope">
-          {{ scope.row.startTime }} ~ {{ scope.row.endTime }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="issueCount" label="券发放数" min-width="100" align="center" />
-      <el-table-column prop="redeemCount" label="券核销数" min-width="100" align="center" />
-      <el-table-column label="操作" min-width="120" align="center" fixed="right">
-        <template #default="scope">
-          <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="table-wrapper">
+      <el-table 
+        :data="tableData" 
+        stripe 
+        style="width: 100%"
+      >
+        <el-table-column prop="activityName" label="活动名称" align="center" min-width="150" />
+        <el-table-column prop="activityType" label="类型" min-width="100" align="center">
+          <template #default="scope">
+            {{ scope.row.activityType === 1 ? '赠送' : '抽奖' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="activityStatus" label="状态" min-width="100" align="center">
+          <template #default="scope">
+            <el-tag v-if="scope.row.activityStatus === 0" type="info">未开始</el-tag>
+            <el-tag v-else-if="scope.row.activityStatus === 1" type="success">进行中</el-tag>
+            <el-tag v-else type="danger">已结束</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="活动时间" min-width="280" align="center">
+          <template #default="scope">
+            {{ scope.row.startTime }} ~ {{ scope.row.endTime }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="issueCount" label="券发放数" min-width="100" align="center" />
+        <el-table-column prop="redeemCount" label="券核销数" min-width="100" align="center" />
+        <el-table-column label="操作" min-width="120" align="center" fixed="right">
+          <template #default="scope">
+            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <div class="pagination-container" style="margin-top: 20px; display: flex; justify-content: flex-end;">
       <el-pagination
@@ -160,9 +160,9 @@ const fetchTableData = async () => {
     })
     const records = res.records || []
     
-    // 动态计算活动状态
+    // 动态计算活动状态并在前端进行过滤
     const now = new Date().getTime()
-    records.forEach((item: any) => {
+    let filteredRecords = records.map((item: any) => {
       const startTime = new Date(item.startTime).getTime()
       const endTime = new Date(item.endTime).getTime()
       
@@ -173,10 +173,16 @@ const fetchTableData = async () => {
       } else {
         item.activityStatus = 1 // 进行中
       }
+      return item
     })
     
-    tableData.value = records
-    total.value = res.total || 0
+    // 如果用户选择了活动状态，在前端进行二次过滤
+    if (searchForm.status !== '') {
+      filteredRecords = filteredRecords.filter((item: any) => item.activityStatus === searchForm.status)
+    }
+    
+    tableData.value = filteredRecords
+    total.value = searchForm.status !== '' ? filteredRecords.length : (res.total || 0)
   } catch (error) {
     console.error('获取活动列表失败:', error)
   }
@@ -219,8 +225,7 @@ const form = reactive({
   couponId: null as number | null,
   startTime: '',
   endTime: '',
-  issueCount: 0,
-  activityStatus: 0 // 默认未开始，后端或定时任务可自动更新
+  issueCount: 0
 })
 
 const resetForm = () => {
@@ -231,7 +236,6 @@ const resetForm = () => {
   form.startTime = ''
   form.endTime = ''
   form.issueCount = 0
-  form.activityStatus = 0
   validTimeRange.value = []
 }
 
@@ -248,7 +252,6 @@ const handleEdit = (row: any) => {
   form.activityType = row.activityType
   form.couponId = row.couponId
   form.issueCount = row.issueCount
-  form.activityStatus = row.activityStatus
   validTimeRange.value = [
     row.startTime ? row.startTime.replace('T', ' ') : '',
     row.endTime ? row.endTime.replace('T', ' ') : ''
@@ -302,3 +305,53 @@ const handleDelete = async (row: any) => {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.page-wrap {
+  padding: 24px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: #ffffff;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  
+  :deep(.el-form-item) {
+    margin-bottom: 0;
+  }
+}
+
+.table-wrapper {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  margin-bottom: 24px;
+
+  :deep(.el-table) {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ebeef5;
+    
+    th.el-table__cell {
+      background-color: #f5f7fa;
+      color: #606266;
+      font-weight: 600;
+    }
+  }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  background: #ffffff;
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+</style>

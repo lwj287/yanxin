@@ -1,6 +1,6 @@
 <template>
-  <div class="page-container">
-    <div class="search-bar" style="display: flex; justify-content: space-between;">
+  <div class="page-wrap">
+    <div class="search-bar">
       <el-form :inline="true" :model="searchForm">
         <el-form-item label="优惠券名称">
           <el-input v-model="searchForm.name" placeholder="请输入名称" clearable />
@@ -13,34 +13,34 @@
       <el-button type="success" @click="handleAdd">新增优惠券</el-button>
     </div>
 
-    <el-table 
-      :data="tableData" 
-      border 
-      stripe 
-      :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
-      style="width: 100%"
-    >
-      <el-table-column prop="couponName" label="优惠券名称" align="center" min-width="150" />
-      <el-table-column prop="faceValue" label="面额(元)" align="center" min-width="100" />
-      <el-table-column prop="conditionAmount" label="使用条件" align="center" min-width="150">
-        <template #default="scope">
-          {{ scope.row.conditionAmount === 0 ? '无门槛' : `满${scope.row.conditionAmount}元可用` }}
-        </template>
-      </el-table-column>
-      <el-table-column label="有效期" align="center" min-width="280">
-        <template #default="scope">
-          {{ scope.row.validStartTime }} ~ {{ scope.row.validEndTime }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="issueCount" label="发放数量" align="center" min-width="100" />
-      <el-table-column prop="usedCount" label="使用数量" align="center" min-width="100" />
-      <el-table-column label="操作" width="120" align="center" fixed="right">
-        <template #default="scope">
-          <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="table-wrapper">
+      <el-table 
+        :data="tableData" 
+        stripe 
+        style="width: 100%"
+      >
+        <el-table-column prop="couponName" label="优惠券名称" align="center" min-width="150" />
+        <el-table-column prop="faceValue" label="面额(元)" align="center" min-width="100" />
+        <el-table-column prop="conditionAmount" label="使用条件" align="center" min-width="150">
+          <template #default="scope">
+            {{ scope.row.conditionAmount === 0 ? '无门槛' : `满${scope.row.conditionAmount}元可用` }}
+          </template>
+        </el-table-column>
+        <el-table-column label="有效期" align="center" min-width="280">
+          <template #default="scope">
+            {{ scope.row.validStartTime }} ~ {{ scope.row.validEndTime }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="issueCount" label="发放数量" align="center" min-width="100" />
+        <el-table-column prop="usedCount" label="使用数量" align="center" min-width="100" />
+        <el-table-column label="操作" width="120" align="center" fixed="right">
+          <template #default="scope">
+            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <div class="pagination-container" style="margin-top: 20px; display: flex; justify-content: flex-end;">
       <el-pagination
@@ -237,3 +237,53 @@ const handleDelete = async (row: any) => {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.page-wrap {
+  padding: 24px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: #ffffff;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  
+  :deep(.el-form-item) {
+    margin-bottom: 0;
+  }
+}
+
+.table-wrapper {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  margin-bottom: 24px;
+
+  :deep(.el-table) {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ebeef5;
+    
+    th.el-table__cell {
+      background-color: #f5f7fa;
+      color: #606266;
+      font-weight: 600;
+    }
+  }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  background: #ffffff;
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+</style>

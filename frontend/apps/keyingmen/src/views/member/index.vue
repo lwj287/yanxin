@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="page-wrap">
     <div class="search-bar">
       <el-form :inline="true" :model="searchForm">
         <el-form-item label="会员姓名">
@@ -21,43 +21,43 @@
       </el-form>
     </div>
 
-    <el-table 
-      :data="tableData" 
-      border 
-      stripe 
-      :header-cell-style="{ background: '#f5f7fa', color: '#606266', fontWeight: 'bold' }"
-      style="width: 100%"
-    >
-      <el-table-column prop="memberName" label="会员姓名" align="center" />
-      <el-table-column prop="phone" label="手机号" align="center" />
-      <el-table-column prop="memberLevel" label="等级" align="center">
-        <template #default="scope">
-          <el-tag :type="scope.row.memberLevel === 1 ? 'warning' : 'info'">
-            {{ scope.row.memberLevel === 1 ? '高级会员' : '普通会员' }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="memberStatus" label="状态" align="center">
-        <template #default="scope">
-          <el-tag :type="scope.row.memberStatus === 1 ? 'success' : 'danger'">
-            {{ scope.row.memberStatus === 1 ? '正常' : '禁用' }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="accountBalance" label="积分余额" align="center" />
-      <el-table-column prop="inviteCount" label="邀请人数" align="center" />
-      <el-table-column prop="inviterId" label="邀请人ID" align="center" />
-      <el-table-column prop="registerTime" label="注册时间" align="center" width="180" />
-      <el-table-column label="操作" width="200" align="center">
-        <template #default="scope">
-          <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button link :type="scope.row.memberStatus === 1 ? 'warning' : 'success'" size="small" @click="handleStatusChange(scope.row)">
-            {{ scope.row.memberStatus === 1 ? '禁用' : '启用' }}
-          </el-button>
-          <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="table-wrapper">
+      <el-table 
+        :data="tableData" 
+        stripe 
+        style="width: 100%"
+      >
+        <el-table-column prop="memberName" label="会员姓名" align="center" />
+        <el-table-column prop="phone" label="手机号" align="center" />
+        <el-table-column prop="memberLevel" label="等级" align="center">
+          <template #default="scope">
+            <el-tag :type="scope.row.memberLevel === 1 ? 'warning' : 'info'">
+              {{ scope.row.memberLevel === 1 ? '高级会员' : '普通会员' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="memberStatus" label="状态" align="center">
+          <template #default="scope">
+            <el-tag :type="scope.row.memberStatus === 1 ? 'success' : 'danger'">
+              {{ scope.row.memberStatus === 1 ? '正常' : '禁用' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="accountBalance" label="积分余额" align="center" />
+        <el-table-column prop="inviteCount" label="邀请人数" align="center" />
+        <el-table-column prop="inviterId" label="邀请人ID" align="center" />
+        <el-table-column prop="registerTime" label="注册时间" align="center" width="180" />
+        <el-table-column label="操作" width="200" align="center">
+          <template #default="scope">
+            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button link :type="scope.row.memberStatus === 1 ? 'warning' : 'success'" size="small" @click="handleStatusChange(scope.row)">
+              {{ scope.row.memberStatus === 1 ? '禁用' : '启用' }}
+            </el-button>
+            <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <div class="pagination-container" style="margin-top: 20px; display: flex; justify-content: flex-end;">
       <el-pagination
@@ -229,3 +229,53 @@ const handleDelete = async (row: any) => {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.page-wrap {
+  padding: 24px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: #ffffff;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  
+  :deep(.el-form-item) {
+    margin-bottom: 0;
+  }
+}
+
+.table-wrapper {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  margin-bottom: 24px;
+
+  :deep(.el-table) {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ebeef5;
+    
+    th.el-table__cell {
+      background-color: #f5f7fa;
+      color: #606266;
+      font-weight: 600;
+    }
+  }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  background: #ffffff;
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+</style>

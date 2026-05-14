@@ -4,8 +4,8 @@
       <div class="search-area">
         <el-input v-model="searchQuery" placeholder="搜索课程名称" clearable class="search-input" :prefix-icon="Search" />
         <el-select v-model="category" placeholder="选择分类" clearable class="search-select">
-          <el-option label="保洁服务" value="1" />
-          <el-option label="保姆服务" value="2" />
+          <el-option label="保洁服务" value="保洁服务" />
+          <el-option label="保姆服务" value="保姆服务" />
         </el-select>
         <el-button type="primary" @click="handleSearch">查询</el-button>
         <el-button @click="handleReset">重置</el-button>

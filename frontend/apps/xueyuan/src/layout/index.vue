@@ -14,6 +14,10 @@
         text-color="#303133"
         active-text-color="#409eff"
       >
+        <el-menu-item index="/dashboard">
+          <el-icon><DataAnalysis /></el-icon>
+          <span>首页概览</span>
+        </el-menu-item>
         <el-menu-item index="/course">
           <el-icon><VideoCamera /></el-icon>
           <span>在线课程</span>
@@ -29,10 +33,6 @@
         <el-menu-item index="/user">
           <el-icon><User /></el-icon>
           <span>学员管理</span>
-        </el-menu-item>
-        <el-menu-item index="/statistics">
-          <el-icon><DataAnalysis /></el-icon>
-          <span>数据统计</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -83,9 +83,10 @@ const activeMenu = computed(() => route.path)
 
 onMounted(() => {
   // 页面加载时请求当前用户信息，若 Token 失效（如后端重启），拦截器会自动跳转到登录页
-  request.get('/auth/info').catch(() => {
-    // 失败已在拦截器中处理
-  })
+  // 为支持大屏免密演示，暂时注释掉 info 请求
+  // request.get('/auth/info').catch(() => {
+  //   // 失败已在拦截器中处理
+  // })
 })
 
 const handleCommand = (command: string) => {

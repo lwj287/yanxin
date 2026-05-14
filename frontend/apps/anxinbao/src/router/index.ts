@@ -6,8 +6,14 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('../layout/index.vue'),
-      redirect: '/staff',
+      redirect: '/dashboard',
       children: [
+        {
+          path: 'dashboard',
+          name: 'Dashboard',
+          component: () => import('../views/dashboard/index.vue'),
+          meta: { title: '首页概览' }
+        },
         {
           path: 'staff',
           name: 'Staff',
@@ -43,12 +49,6 @@ const router = createRouter({
           name: 'Claim',
           component: () => import('../views/claim/index.vue'),
           meta: { title: '理赔审核管理' }
-        },
-        {
-          path: 'statistics',
-          name: 'Statistics',
-          component: () => import('../views/statistics/index.vue'),
-          meta: { title: '数据统计' }
         }
       ]
     }

@@ -1,10 +1,5 @@
 <template>
   <div class="dashboard-container">
-    <div class="welcome-box">
-      <h2>欢迎回来，调度员 Admin 👋</h2>
-      <p>今天是 {{ currentDate }}，系统已为您准备好最新的调度数据。</p>
-    </div>
-
     <el-row :gutter="20" class="stat-cards">
       <el-col :span="6">
         <el-card shadow="hover" class="stat-card dispatch" v-loading="loading">
@@ -45,7 +40,7 @@
     </el-row>
     
     <el-row :gutter="20" class="charts-area">
-      <el-col :span="16">
+      <el-col :span="24">
         <el-card shadow="hover" class="chart-card">
           <template #header>
             <div class="card-header">
@@ -55,34 +50,13 @@
           <div class="chart-container" ref="chartRef"></div>
         </el-card>
       </el-col>
-      <el-col :span="8">
-        <el-card shadow="hover" class="chart-card">
-          <template #header>
-            <div class="card-header">
-              <span>快速操作</span>
-            </div>
-          </template>
-          <div class="quick-actions">
-            <div class="action-grid">
-              <div class="grid-item primary-bg" @click="$router.push('/dispatch')">
-                <el-icon class="grid-icon"><Position /></el-icon>
-                <span class="grid-text">去派单</span>
-              </div>
-              <div class="grid-item success-bg" @click="$router.push('/dispatched')">
-                <el-icon class="grid-icon"><List /></el-icon>
-                <span class="grid-text">查记录</span>
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
     </el-row>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
-import { Timer, Finished, Avatar, Briefcase, Position, List, Setting } from '@element-plus/icons-vue'
+import { Timer, Finished, Avatar, Briefcase } from '@element-plus/icons-vue'
 import { getDashboardStatistics } from '@/api/dispatch'
 import * as echarts from 'echarts'
 
@@ -90,10 +64,6 @@ const statistics = ref<any>({})
 const loading = ref(false)
 const chartRef = ref<HTMLElement | null>(null)
 let chartInstance: echarts.ECharts | null = null
-
-const currentDate = new Date().toLocaleDateString('zh-CN', {
-  year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
-})
 
 const initChart = () => {
   if (!chartRef.value) return
@@ -187,33 +157,15 @@ onUnmounted(() => {
 
 <style scoped>
 .dashboard-container {
-  padding: 10px;
-}
-
-.welcome-box {
-  margin-bottom: 25px;
-  background: #fff;
-  padding: 20px 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-}
-
-.welcome-box h2 {
-  margin: 0 0 10px 0;
-  color: #303133;
-}
-
-.welcome-box p {
-  margin: 0;
-  color: #606266;
+  padding: 24px;
 }
 
 .stat-cards {
-  margin-bottom: 25px;
+  margin-bottom: 24px;
 }
 
 .stat-card {
-  border-radius: 8px;
+  border-radius: 16px;
   border: none;
 }
 
@@ -257,7 +209,7 @@ onUnmounted(() => {
 }
 
 .chart-card {
-  border-radius: 8px;
+  border-radius: 16px;
   height: 350px;
   display: flex;
   flex-direction: column;
@@ -275,72 +227,5 @@ onUnmounted(() => {
 .chart-container {
   width: 100%;
   height: 100%;
-}
-
-.quick-actions {
-  width: 100%;
-  height: 100%;
-}
-
-.action-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 60px;
-  width: 100%;
-  margin: 60px 60px 60px 60px;
-}
-
-.grid-item {
-  aspect-ratio: 1 / 1;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  color: white;
-}
-
-.grid-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.grid-icon {
-  font-size: 36px;
-  margin-bottom: 12px;
-  opacity: 0.9;
-}
-
-.grid-text {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-.primary-bg {
-  background: linear-gradient(135deg, #66b1ff 0%, #409eff 100%);
-}
-
-.success-bg {
-  background: linear-gradient(135deg, #85ce61 0%, #67c23a 100%);
-}
-
-.warning-bg {
-  background: linear-gradient(135deg, #f3d19e 0%, #e6a23c 100%);
-}
-
-.info-bg {
-  background: linear-gradient(135deg, #b3d8ff 0%, #909399 100%);
-}
-
-.warning-bg {
-  background: linear-gradient(135deg, #f3d19e 0%, #e6a23c 100%);
-}
-
-.info-bg {
-  background: linear-gradient(135deg, #b3d8ff 0%, #909399 100%);
 }
 </style>

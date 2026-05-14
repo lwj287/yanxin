@@ -168,7 +168,7 @@ const loadData = async () => {
       current: currentPage.value,
       size: pageSize.value,
       certName: searchQuery.value,
-      auditStatus: status.value === '' ? undefined : status.value
+      certStatus: status.value === '' ? undefined : status.value
     })
     
     tableData.value = res.records.map((item: any) => ({

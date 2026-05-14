@@ -152,12 +152,13 @@ const initConversionChart = () => {
 
 <style scoped lang="scss">
 .dashboard-container {
-  padding: 20px;
+  padding: 24px;
   
   .stat-cards {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     
     .stat-card {
+      border-radius: 16px;
       .stat-header {
         display: flex;
         justify-content: space-between;
@@ -193,6 +194,9 @@ const initConversionChart = () => {
   }
   
   .chart-row {
+    :deep(.el-card) {
+      border-radius: 16px;
+    }
     .card-header {
       font-weight: bold;
       color: #303133;

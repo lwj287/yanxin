@@ -18,10 +18,10 @@ export default defineConfig({
     }
   },
   server: {
-    port: 3005,
+    port: 3007,
     proxy: {
       '/api/suoguanjia': {
-        target: 'http://localhost:8084',
+        target: 'http://localhost:8087',
         changeOrigin: true
       }
     }
