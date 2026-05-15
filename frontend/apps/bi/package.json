@@ -2,5 +2,23 @@
   "name": "@yanxin-frontend/bi",
   "version": "1.0.0",
   "private": true,
-  "description": "燕鑫BI系统 – 经营数据驾驶舱与BI分析系统"
+  "description": "燕鑫BI系统 – 经营数据驾驶舱与BI分析系统",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "axios": "^1.6.8",
+    "element-plus": "^2.6.3",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.8",
+    "vue-tsc": "^2.0.7"
+  }
 }
