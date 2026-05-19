@@ -1,10 +1,10 @@
-const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:8080/api' : 'https://api.yanxinxueyuan.com/api';
+const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8082/api' : 'https://api.yanxinxueyuan.com/api';
 
 export const request = <T = any>(options: UniApp.RequestOptions): Promise<T> => {
   return new Promise((resolve, reject) => {
     uni.request({
       ...options,
-      url: BASE_URL + options.url,
+      url: options.url.startsWith('http') ? options.url : BASE_URL + options.url,
       header: {
         'Content-Type': 'application/json',
         'Authorization': uni.getStorageSync('token') || '',
@@ -13,7 +13,7 @@ export const request = <T = any>(options: UniApp.RequestOptions): Promise<T> => 
       success: (res: any) => {
         if (res.statusCode === 200) {
           const data = res.data;
-          
+
           // 如果返回的不是统一封装的Result结构，直接返回数据
           if (data.code === undefined) {
             resolve(data);

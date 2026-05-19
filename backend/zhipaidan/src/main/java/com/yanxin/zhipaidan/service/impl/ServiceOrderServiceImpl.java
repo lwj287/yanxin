@@ -12,6 +12,7 @@ import com.yanxin.zhipaidan.service.IServiceOrderService;
 import com.yanxin.zhipaidan.service.IStaffScheduleStatusService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +31,7 @@ public class ServiceOrderServiceImpl extends ServiceImpl<ServiceOrderMapper, Ser
     private IStaffScheduleStatusService staffScheduleStatusService;
 
     @Autowired
+    @Lazy
     private IDispatchRecordService dispatchRecordService;
 
     @Override
@@ -65,7 +67,7 @@ public class ServiceOrderServiceImpl extends ServiceImpl<ServiceOrderMapper, Ser
 
             QueryWrapper<DispatchRecord> conflictQuery = new QueryWrapper<>();
             conflictQuery.eq("staff_id", staff.getStaffId())
-                    .ne("status", 3) // 排除已撤销的派单
+                    .ne("status", 4) // 排除已撤销的派单
                     // 判断时间重叠: (已有订单开始 < 新订单结束+1h) AND (已有订单结束 > 新订单开始-1h)
                     .lt("plan_start_time", reqEndWithBuffer)
                     .gt("plan_end_time", reqStartWithBuffer);

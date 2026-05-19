@@ -1,5 +1,6 @@
 <template>
-  <slot />
+  <view class="app">
+  </view>
 </template>
 
 <script>

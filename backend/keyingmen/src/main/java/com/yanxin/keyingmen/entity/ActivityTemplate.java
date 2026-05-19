@@ -11,11 +11,19 @@ public class ActivityTemplate {
     @TableId(type = com.baomidou.mybatisplus.annotation.IdType.AUTO)
     private Long activityId;
     private Long couponId;
+    
+    @TableField(exist = false)
+    private String couponName;
+    @TableField(exist = false)
+    private java.math.BigDecimal faceValue;
+    @TableField(exist = false)
+    private java.math.BigDecimal conditionAmount;
+    
     private String activityName;
     private Integer activityType;
     @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private java.time.LocalDateTime startTime;
-    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+   @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private java.time.LocalDateTime endTime;
     private Integer issueCount;
     private Integer redeemCount;

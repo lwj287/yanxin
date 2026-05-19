@@ -62,7 +62,6 @@ CREATE TABLE `activity_template` (
   `activity_type` tinyint(4) NOT NULL COMMENT '活动类型：1-赠送，2-抽奖',
   `start_time` datetime NOT NULL COMMENT '开始时间',
   `end_time` datetime NOT NULL COMMENT '结束时间',
-  `activity_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '活动状态：0-未开始，1-进行中，2-已结束',
   `issue_count` int(11) NOT NULL DEFAULT '0' COMMENT '优惠券发放数量',
   `redeem_count` int(11) NOT NULL DEFAULT '0' COMMENT '优惠券兑换数量',
   -- 通用业务字段

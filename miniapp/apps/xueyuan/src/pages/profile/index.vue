@@ -11,7 +11,7 @@
         <text class="id">登录后享受更多服务</text>
       </view>
     </view>
-    
+
     <view class="menu-list card">
       <view class="menu-item" @click="goTo('/pages/cert/index')">
         <text class="icon">🏆</text>
@@ -19,33 +19,19 @@
         <text class="arrow">›</text>
       </view>
       <view class="menu-item" @click="goTo('/pages/record/index')">
-        <text class="icon">📚</text>
+        <text class="icon">📖</text>
         <text class="title">学习记录</text>
         <text class="arrow">›</text>
       </view>
       <view class="menu-item" @click="goTo('/pages/score/index')">
-        <text class="icon">📝</text>
+        <text class="icon">📘</text>
         <text class="title">考试成绩</text>
         <text class="arrow">›</text>
       </view>
     </view>
-    
+
     <button class="logout-btn" v-if="isLogin" @click="handleLogout">退出登录</button>
 
-    <view class="tabbar">
-      <view class="tab-item" @click="goCourse">
-        <view class="tab-icon">
-          <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOTk5OTk5IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMiIgeT0iNyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjE0IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48cGF0aCBkPSJNMTYgMjFWNWEyIDIgMCAwIDAtMi0yaC00YTIgMiAwIDAgMC0yIDJ2MTYiPjwvcGF0aD48L3N2Zz4=" style="width: 48rpx; height: 48rpx;" mode="aspectFit"></image>
-        </view>
-        <view class="tab-text">课程</view>
-      </view>
-      <view class="tab-item active">
-        <view class="tab-icon">
-          <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzQwOWVmZiIgc3Ryb2tlPSIjNDA5ZWZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" style="width: 48rpx; height: 48rpx;" mode="aspectFit"></image>
-        </view>
-        <view class="tab-text">我的</view>
-      </view>
-    </view>
   </view>
 </template>
 
@@ -127,7 +113,7 @@ const handleLogout = () => {
   border-radius: 20px;
   margin-bottom: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  
+
   .avatar {
     width: 64px;
     height: 64px;
@@ -135,18 +121,18 @@ const handleLogout = () => {
     background-color: #e4e7ed;
     margin-right: 16px;
   }
-  
+
   .info {
     display: flex;
     flex-direction: column;
-    
+
     .name {
       font-size: 20px;
       font-weight: 600;
       color: #303133;
       margin-bottom: 4px;
     }
-    
+
     .id {
       font-size: 13px;
       color: #909399;
@@ -157,28 +143,28 @@ const handleLogout = () => {
 .menu-list {
   padding: 0 16px;
   margin-bottom: 32px;
-  
+
   .menu-item {
     display: flex;
     align-items: center;
     padding: 16px 0;
     border-bottom: 1px solid #ebeef5;
-    
+
     &:last-child {
       border-bottom: none;
     }
-    
+
     .icon {
       font-size: 20px;
       margin-right: 12px;
     }
-    
+
     .title {
       flex: 1;
       font-size: 15px;
       color: #303133;
     }
-    
+
     .arrow {
       font-size: 24px;
       color: #c0c4cc;
@@ -195,7 +181,7 @@ const handleLogout = () => {
   line-height: 48px;
   border-radius: 12px;
   border: none;
-  
+
   &::after {
     border: none;
   }

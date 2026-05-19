@@ -62,6 +62,32 @@ public class QualityTaskController {
         return Result.success(taskService.updateById(task));
     }
 
+    @PostMapping("/save")
+    public Result<?> save(@RequestBody QualityTask task) {
+        task.setCreateTime(LocalDateTime.now());
+        task.setUpdateTime(LocalDateTime.now());
+        if (task.getStatus() == null) {
+            task.setStatus("UPLOADED"); // 默认待审核
+        }
+        if (task.getStaffName() == null) {
+            task.setStaffName("小程序测试人员");
+        }
+        if (task.getServiceType() == null) {
+            task.setServiceType("日常保洁");
+        }
+        if (task.getOrderId() == null) {
+            task.setOrderId(88005L); // 给一个默认订单ID
+        }
+        if (task.getStaffId() == null) {
+            task.setStaffId(205L); // 给一个默认员工ID
+        }
+        if (task.getTemplateId() == null) {
+            task.setTemplateId(1L); // 给一个默认模板ID
+        }
+        taskService.save(task);
+        return Result.success(task);
+    }
+
     @PostMapping("/delete/{id}")
     public Result<?> delete(@PathVariable Long id) {
         return Result.success(taskService.removeById(id));

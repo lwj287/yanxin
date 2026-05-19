@@ -29,7 +29,7 @@ public class DispatchRecord {
     private Integer estimatedDistance;
     
     /**
-     * 状态:0-待接单(可选),1-已接单/生效中,2-已完工,3-已撤销
+     * 状态:1-待服务,2-服务中,3-已完成,4-已取消/撤销
      */
     private Integer status;
     

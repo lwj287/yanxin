@@ -5,10 +5,12 @@ SET NAMES utf8mb4;
 DROP TABLE IF EXISTS sys_user;
 CREATE TABLE sys_user (
   id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
-  username VARCHAR(50) NOT NULL UNIQUE COMMENT '用户名',
+  username VARCHAR(50) NOT NULL UNIQUE COMMENT '登录用户名',
   password VARCHAR(200) NOT NULL COMMENT '登录密码',
   real_name VARCHAR(50) NOT NULL COMMENT '真实姓名',
-  phone VARCHAR(20) COMMENT '手机号',
+  gender TINYINT COMMENT '性别(1男 2女)',
+  phone VARCHAR(20) NOT NULL UNIQUE COMMENT '手机号',
+  avatar_url VARCHAR(255) COMMENT '头像地址',
   role VARCHAR(20) NOT NULL COMMENT '角色(ADMIN/HR)',
   status TINYINT NOT NULL DEFAULT 1 COMMENT '状态(1启用 0禁用)',
   deleted TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除(0否 1是)',
@@ -78,8 +80,8 @@ CREATE TABLE candidate_resume_profile (
   UNIQUE KEY uk_candidate_resume_profile_candidate (candidate_id)
 ) ENGINE=InnoDB COMMENT='求职者在线简历档案表';
 
-DROP TABLE IF EXISTS resume_info;
-CREATE TABLE resume_info (
+DROP TABLE IF EXISTS resume_delivery_record;
+CREATE TABLE resume_delivery_record (
   id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
   candidate_id BIGINT NOT NULL COMMENT '求职者ID',
   job_id BIGINT NOT NULL COMMENT '岗位ID',
@@ -102,7 +104,7 @@ CREATE TABLE resume_info (
   deleted TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除(0否 1是)',
   create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-) ENGINE=InnoDB COMMENT='简历信息表';
+) ENGINE=InnoDB COMMENT='简历投递记录表';
 
 DROP TABLE IF EXISTS interview_schedule;
 CREATE TABLE interview_schedule (
@@ -201,38 +203,3 @@ CREATE TABLE sys_notice (
   create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB COMMENT='系统通知表';
-
-INSERT INTO sys_user(username,password,real_name,phone,role,status,deleted)
-VALUES
-('admin','123456','系统管理员','13800000001','ADMIN',1,0),
-('hr','123456','招聘专员','13800000002','HR',1,0);
-
-INSERT INTO sys_dict(dict_type,dict_code,dict_name,sort_no,status,deleted) VALUES
-('job_type','CLEANER','保洁',1,1,0),
-('job_type','NANNY','保姆',2,1,0),
-('education','MIDDLE','初中',1,1,0),
-('education','HIGH','高中',2,1,0),
-('education','COLLEGE','大专',3,1,0),
-('skill','COOKING','做饭',1,1,0),
-('skill','BABYCARE','育儿',2,1,0),
-('skill','ELDERCARE','护老',3,1,0),
-('city','SZ','深圳',1,1,0),
-('city','GZ','广州',2,1,0);
-
-INSERT INTO job_post(title,job_type_code,city_code,area_code,salary_min,salary_max,education_code,min_age,max_age,min_experience_years,required_skills,description,publish_status,recruiter_id,status,deleted)
-VALUES
-('家庭保洁','CLEANER','SZ','NS',6000,8200,'MIDDLE',25,45,1,'COOKING','负责家庭日常保洁与简餐制作',1,1,1,0),
-('住家保姆','NANNY','SZ','NS',7500,10500,'HIGH',28,50,2,'BABYCARE,COOKING','负责婴幼儿照护和家庭三餐',1,1,1,0),
-('住家保姆','NANNY','GZ','TH',7200,10200,'HIGH',28,50,2,'BABYCARE,COOKING','负责婴幼儿照护和家庭三餐',1,2,1,0),
-('医院保洁','CLEANER','SZ','NS',6200,8600,'MIDDLE',24,48,1,'ELDERCARE','负责病区保洁与消杀配合',1,1,1,0),
-('商场保洁','CLEANER','GZ','TH',5800,8200,'MIDDLE',22,45,1,'COOKING','负责公共区域保洁与巡检',1,2,1,0),
-('育儿保姆','NANNY','SZ','NS',8000,11500,'COLLEGE',26,45,3,'BABYCARE,COOKING','负责0-3岁幼儿照护与早教陪伴',1,1,1,0),
-('护老保姆','NANNY','GZ','TH',7800,11000,'HIGH',30,52,3,'ELDERCARE,COOKING','负责老人照护与康复陪护',1,2,1,0),
-('钟点保洁','CLEANER','GZ','TH',5500,7600,'MIDDLE',23,48,0,'COOKING','负责钟点上门保洁服务',1,1,1,0),
-('开荒保洁','CLEANER','SZ','NS',6800,9800,'HIGH',24,48,2,'COOKING','负责新房开荒与深度清洁',1,1,1,0),
-('玻璃清洁员','CLEANER','GZ','TH',6200,9000,'MIDDLE',23,46,1,'COOKING','负责高层玻璃与外立面清洁',1,2,1,0),
-('办公室保洁','CLEANER','SZ','NS',6000,8300,'MIDDLE',22,45,1,'COOKING','负责办公区日常保洁与消毒',1,1,1,0),
-('托育保姆','NANNY','GZ','TH',8200,11800,'COLLEGE',24,45,3,'BABYCARE,COOKING','负责托育家庭幼儿照护',1,2,1,0),
-('月嫂保姆','NANNY','SZ','NS',9800,13800,'COLLEGE',26,48,4,'BABYCARE,COOKING','负责产后护理与新生儿照护',1,1,1,0),
-('老人陪护保姆','NANNY','GZ','TH',8500,12500,'HIGH',30,55,4,'ELDERCARE,COOKING','负责老人日常陪护和康复协助',1,2,1,0),
-('夜班保姆','NANNY','SZ','NS',9000,13000,'HIGH',27,50,3,'BABYCARE,ELDERCARE','负责夜间照护与应急处理',1,1,1,0);

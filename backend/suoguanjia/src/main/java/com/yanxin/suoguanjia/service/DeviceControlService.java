@@ -15,4 +15,10 @@ public interface DeviceControlService {
      * 设备状态上报 (Mock设备主动调用)
      */
     Result<Boolean> reportStatus(DeviceReportDTO req);
+
+    Result<Boolean> lockDevice(UnlockReqDTO req);
+
+    Result<Boolean> rebootDevice(UnlockReqDTO req);
+
+    Result<Boolean> applyRepair(UnlockReqDTO req);
 }

@@ -22,6 +22,19 @@ public class StaffScheduleStatusController {
 
     @GetMapping("/{id}")
     public Result<StaffScheduleStatus> getById(@PathVariable Long id) {
-        return Result.success(staffScheduleStatusService.getById(id));
+        // 由于前端传过来的是 staffId，而不是主键 id，这里修改为根据 staffId 查询
+        StaffScheduleStatus status = staffScheduleStatusService.lambdaQuery().eq(StaffScheduleStatus::getStaffId, id).one();
+        return Result.success(status);
+    }
+
+    @GetMapping("/phone/{phone}")
+    public Result<StaffScheduleStatus> getByPhone(@PathVariable String phone) {
+        return Result.success(staffScheduleStatusService.lambdaQuery().eq(StaffScheduleStatus::getStaffPhone, phone).one());
+    }
+
+    @PutMapping("/update")
+    public Result<?> update(@RequestBody StaffScheduleStatus staffScheduleStatus) {
+        staffScheduleStatusService.updateById(staffScheduleStatus);
+        return Result.success();
     }
 }

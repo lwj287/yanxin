@@ -3,9 +3,9 @@
     <video 
       v-if="isLogin"
       class="video-player"
-      :src="course.videoUrl || 'https://www.w3schools.com/html/mov_bbb.mp4'"
+      :src="course.videoUrl"
       controls
-      autoplay
+      :autoplay="false"
       @timeupdate="onTimeUpdate"
     ></video>
     <view v-else class="video-placeholder" @click="goToLogin">
@@ -39,14 +39,14 @@ import { ref, onMounted, computed } from 'vue';
 import { getCourseDetail } from '@/api/index';
 
 const course = ref<any>({});
-const courseId = ref<number | null>(null);
+const courseId = ref<string | null>(null);
 const isLogin = computed(() => !!uni.getStorageSync('token'));
 
 onMounted(() => {
   const pages = getCurrentPages();
   const options = (pages[pages.length - 1] as any).options;
   if (options && options.id) {
-    courseId.value = parseInt(options.id, 10);
+    courseId.value = options.id;
     fetchDetail();
   }
 });
@@ -56,12 +56,19 @@ const fetchDetail = async () => {
   try {
     const res = await getCourseDetail(courseId.value);
     if (res) {
-      const categoryMap: Record<number, string> = { 1: '保洁服务', 2: '保姆服务' };
-      const levelMap: Record<number, string> = { 1: '初级', 2: '中级', 3: '高级' };
+      let videoUrl = res.videoUrl;
+      if (videoUrl && videoUrl.startsWith('/api')) {
+        videoUrl = 'http://localhost:8082' + videoUrl;
+      }
+      
       course.value = {
         ...res,
-        category: categoryMap[res.categoryId] || '其他',
-        level: levelMap[res.certLevel] || '初级'
+        title: res.courseName,
+        category: res.courseType || '其他',
+        level: res.difficulty || '初级',
+        description: res.courseContent,
+        videoUrl: videoUrl,
+        studentCount: res.enrolled || 0
       };
     }
   } catch (e) {

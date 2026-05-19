@@ -29,7 +29,7 @@ CREATE TABLE `course` (
   `difficulty` varchar(50) DEFAULT NULL COMMENT '难度等级',
   `course_duration` int DEFAULT '0' COMMENT '课程时长/分钟',
   `course_content` text COMMENT '课程内容',
-  `course_cover` varchar(255) DEFAULT NULL COMMENT '课程封面',
+  `video_url` varchar(255) DEFAULT NULL COMMENT '课程视频',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`course_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='存储课程核心信息';

@@ -30,6 +30,16 @@ public class SaTokenConfig implements WebMvcConfigurer {
     }
 
     @Override
+    public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
+    }
+
+    @Override
     public void addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
         String path = new java.io.File(System.getProperty("user.dir"), "uploads").getAbsolutePath();
         registry.addResourceHandler("/uploads/**")

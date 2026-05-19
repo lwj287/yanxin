@@ -1,6 +1,16 @@
 {
-  "name": "@yanxin-miniapp/keyingmen",
+  "name": "keyingmen",
   "version": "1.0.0",
-  "private": true,
-  "description": "燕鑫客盈门 – 会员营销与裂变工具"
+  "scripts": {
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "build:mp-weixin": "uni build -p mp-weixin"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "3.0.0-3090920231225001",
+    "@dcloudio/uni-mp-weixin": "3.0.0-3090920231225001"
+  },
+  "devDependencies": {
+    "@dcloudio/vite-plugin-uni": "3.0.0-3090920231225001",
+    "vite": "^4.0.0"
+  }
 }

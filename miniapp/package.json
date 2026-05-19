@@ -10,12 +10,6 @@
     "build:zhipaidan": "npm run build:mp-weixin --workspace=apps/zhipaidan",
     "dev:zhijian": "npm run dev:mp-weixin --workspace=apps/zhijian",
     "build:zhijian": "npm run build:mp-weixin --workspace=apps/zhijian",
-    "dev:anxinbao": "npm run dev:mp-weixin --workspace=apps/anxinbao",
-    "build:anxinbao": "npm run build:mp-weixin --workspace=apps/anxinbao",
-    "dev:bi": "npm run dev:mp-weixin --workspace=apps/bi",
-    "build:bi": "npm run build:mp-weixin --workspace=apps/bi",
-    "dev:suoguanjia": "npm run dev:mp-weixin --workspace=apps/suoguanjia",
-    "build:suoguanjia": "npm run build:mp-weixin --workspace=apps/suoguanjia",
     "dev:keyingmen": "npm run dev:mp-weixin --workspace=apps/keyingmen",
     "build:keyingmen": "npm run build:mp-weixin --workspace=apps/keyingmen"
   },

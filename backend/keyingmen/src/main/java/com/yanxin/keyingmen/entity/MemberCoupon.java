@@ -16,6 +16,14 @@ public class MemberCoupon {
     private Integer status;
     private java.time.LocalDateTime receiveTime;
     private java.time.LocalDateTime useTime;
+    
+    @TableField(exist = false)
+    private String couponName;
+    @TableField(exist = false)
+    private java.math.BigDecimal faceValue;
+    @TableField(exist = false)
+    private java.math.BigDecimal conditionAmount;
+    
     @com.baomidou.mybatisplus.annotation.TableLogic
     private Integer isDeleted;
     @TableField(fill = com.baomidou.mybatisplus.annotation.FieldFill.INSERT)

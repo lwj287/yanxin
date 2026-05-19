@@ -35,8 +35,8 @@ public class CourseController {
         if (StringUtils.hasText(categoryId)) {
             wrapper.eq(Course::getCourseType, categoryId);
         }
-        // 按创建时间倒序
-        wrapper.orderByDesc(Course::getCreateTime);
+        // 按创建时间倒序，为了保证分页顺序稳定，加上 ID 作为第二排序字段
+        wrapper.orderByDesc(Course::getCreateTime).orderByDesc(Course::getCourseId);
 
         Page<Course> pageInfo = courseService.page(new Page<>(current, size), wrapper);
         

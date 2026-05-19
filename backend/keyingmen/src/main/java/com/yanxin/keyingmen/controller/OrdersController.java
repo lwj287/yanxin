@@ -25,12 +25,23 @@ public class OrdersController {
                                      @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
                                      @RequestParam(value = "orderId", required = false) Long orderId,
                                      @RequestParam(value = "memberName", required = false) String memberName,
-                                     @RequestParam(value = "payStatus", required = false) Integer payStatus) {
+                                     @RequestParam(value = "payStatus", required = false) Integer payStatus,
+                                     @RequestHeader(value = "Authorization", required = false) String token) {
         
         com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Orders> queryWrapper = new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<>();
         queryWrapper.eq(orderId != null, Orders::getOrderId, orderId)
-                    .eq(payStatus != null, Orders::getPayStatus, payStatus)
-                    .orderByDesc(Orders::getCreateTime);
+                    .eq(payStatus != null, Orders::getPayStatus, payStatus);
+                    
+        // MVP阶段解析token获取当前登录的memberId
+        if (token != null && token.startsWith("token_")) {
+            try {
+                Long memberId = Long.parseLong(token.substring(6));
+                queryWrapper.eq(Orders::getMemberId, memberId);
+            } catch (Exception ignored) {
+            }
+        }
+        
+        queryWrapper.orderByDesc(Orders::getCreateTime);
                     
         // 如果有按会员姓名搜索的条件
         if (memberName != null && !memberName.isEmpty()) {

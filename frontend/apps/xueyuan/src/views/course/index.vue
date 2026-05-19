@@ -22,11 +22,11 @@
               已发布
             </div>
             
-            <!-- 封面图 -->
+            <!-- 视频/封面图 -->
             <div class="cover-wrapper">
-              <img v-if="item.courseCover" :src="item.courseCover" class="cover-img" alt="封面" />
+              <video v-if="item.videoUrl" :src="item.videoUrl + '#t=0.001'" class="cover-img" controls preload="metadata"></video>
               <div v-else class="cover-placeholder">
-                <el-icon size="40" color="#c0c4cc"><Document /></el-icon>
+                <el-icon size="40" color="#c0c4cc"><VideoCamera /></el-icon>
               </div>
             </div>
 
@@ -120,21 +120,22 @@
         <el-form-item label="课程内容" prop="courseContent">
           <el-input v-model="form.courseContent" type="textarea" :rows="3" placeholder="请输入课程内容" />
         </el-form-item>
-        <el-form-item label="课程封面" prop="courseCover">
+        <el-form-item label="课程视频" prop="videoUrl">
           <el-upload
+            ref="uploadRef"
             class="avatar-uploader"
-            action="/api/file/upload"
+            action=""
+            accept="video/*"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-            :headers="uploadHeaders"
+            :auto-upload="false"
+            :on-change="handleFileChange"
           >
-            <template v-if="form.courseCover">
-              <img :src="form.courseCover" class="avatar" />
-              <div class="avatar-uploader-mask" @click.stop>
+            <template v-if="form.videoUrl || localVideoUrl">
+              <video :src="localVideoUrl || form.videoUrl" class="avatar" controls></video>
+              <div class="avatar-uploader-mask">
                 <div class="mask-action">
                   <el-icon><Upload /></el-icon>
-                  <span>更换封面</span>
+                  <span>更换视频</span>
                 </div>
               </div>
             </template>
@@ -190,13 +191,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue'
-import { Search, Plus, Document, Calendar, Location, User, UserFilled, Edit, Delete, View, Refresh, Upload } from '@element-plus/icons-vue'
+import { ref, onMounted, reactive, computed } from 'vue'
+import { Search, Plus, Document, Calendar, Location, User, UserFilled, Edit, Delete, View, Refresh, Upload, VideoCamera } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules, UploadProps, UploadInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { getCoursePage, addCourse, updateCourse, deleteCourse, getCourseEnrollment } from '@/api/course'
 
 const uploadRef = ref<UploadInstance>()
+const localVideoUrl = ref('')
+const selectedFile = ref<File | null>(null)
 
 // 报名情况弹窗逻辑
 const enrollmentVisible = ref(false)
@@ -285,75 +288,44 @@ const form = reactive({
   difficulty: '初级',
   courseDuration: 60,
   courseContent: '',
-  courseCover: ''
+  videoUrl: ''
 })
 
 const rules = reactive<FormRules>({
   courseName: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
-  courseType: [{ required: true, message: '请选择课程分类', trigger: 'change' }],
-  courseCover: [{ required: true, message: '请上传课程封面', trigger: 'change' }]
+  courseType: [{ required: true, message: '请选择课程分类', trigger: 'change' }]
 })
 
-const uploadHeaders = {
+const uploadHeaders = computed(() => ({
   Authorization: localStorage.getItem('token') || ''
-}
+}))
 
-const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
-  if (response.code === 200) {
-    form.courseCover = response.data
-    ElMessage.success('上传成功')
-  } else {
-    ElMessage.error(response.message || '上传失败')
-  }
-}
-
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (rawFile.size / 1024 / 1024 > 5) {
-    ElMessage.error('图片大小不能超过 5MB!')
-    return false
-  }
-  return true
-}
-
-const triggerUpload = () => {
-  // empty
-}
-
-const handleFileChange = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  if (target.files && target.files.length > 0) {
-    const file = target.files[0]
-    // 清空 input 值，允许重复选择同一个文件
-    target.value = ''
-    
-    if (beforeAvatarUpload(file)) {
-      // 构建 FormData
-      const formData = new FormData()
-      formData.append('file', file)
-      
-      // 手动触发上传
-      fetch('/api/file/upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': uploadHeaders.Authorization
-        },
-        body: formData
-      })
-      .then(res => res.json())
-      .then(res => {
-        handleAvatarSuccess(res, file as any, [])
-      })
-      .catch(err => {
-        ElMessage.error('上传失败')
-      })
+const handleFileChange: UploadProps['onChange'] = (uploadFile) => {
+  if (uploadFile.raw) {
+    if (uploadFile.raw.size / 1024 / 1024 > 50) {
+      ElMessage.error('视频大小不能超过 50MB!')
+      uploadRef.value?.clearFiles()
+      return
     }
+    selectedFile.value = uploadFile.raw
+    // 创建本地预览链接
+    if (localVideoUrl.value) {
+      URL.revokeObjectURL(localVideoUrl.value)
+    }
+    localVideoUrl.value = URL.createObjectURL(uploadFile.raw)
   }
 }
 
 const handleAdd = () => {
   dialogType.value = 'add'
   dialogVisible.value = true
+  selectedFile.value = null
+  if (localVideoUrl.value) {
+    URL.revokeObjectURL(localVideoUrl.value)
+    localVideoUrl.value = ''
+  }
   if (formRef.value) formRef.value.resetFields()
+  uploadRef.value?.clearFiles()
   Object.assign(form, {
     courseId: undefined,
     courseName: '',
@@ -361,14 +333,20 @@ const handleAdd = () => {
     difficulty: '初级',
     courseDuration: 60,
     courseContent: '',
-    courseCover: ''
+    videoUrl: ''
   })
 }
 
 const handleEdit = (row: any) => {
   dialogType.value = 'edit'
   dialogVisible.value = true
+  selectedFile.value = null
+  if (localVideoUrl.value) {
+    URL.revokeObjectURL(localVideoUrl.value)
+    localVideoUrl.value = ''
+  }
   if (formRef.value) formRef.value.resetFields()
+  uploadRef.value?.clearFiles()
   Object.assign(form, {
     courseId: row.courseId,
     courseName: row.courseName,
@@ -376,7 +354,7 @@ const handleEdit = (row: any) => {
     difficulty: row.difficulty,
     courseDuration: row.courseDuration,
     courseContent: row.courseContent,
-    courseCover: row.courseCover || ''
+    videoUrl: row.videoUrl || ''
   })
 }
 
@@ -384,8 +362,36 @@ const handleSubmit = async () => {
   if (!formRef.value) return
   await formRef.value.validate(async (valid) => {
     if (valid) {
+      if (!form.videoUrl && !selectedFile.value) {
+        ElMessage.error('请上传课程视频')
+        return
+      }
+
       submitLoading.value = true
       try {
+        // 如果选择了新视频，则先进行上传
+        if (selectedFile.value) {
+          const formData = new FormData()
+          formData.append('file', selectedFile.value)
+          
+          const uploadRes = await fetch('/api/file/upload', {
+            method: 'POST',
+            headers: {
+              'Authorization': uploadHeaders.value.Authorization
+            },
+            body: formData
+          }).then(res => res.json())
+
+          if (uploadRes.code === 200) {
+            form.videoUrl = uploadRes.data
+          } else {
+            ElMessage.error(uploadRes.message || '视频上传失败')
+            submitLoading.value = false
+            return
+          }
+        }
+
+        // 提交表单数据
         if (dialogType.value === 'add') {
           await addCourse(form)
           ElMessage.success('发布成功')
@@ -503,7 +509,7 @@ const handleCurrentChange = () => {
       .cover-wrapper {
         height: 180px;
         width: 100%;
-        background-color: #f5f7fa;
+        background-color: #000000;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -512,6 +518,7 @@ const handleCurrentChange = () => {
         .cover-img {
           width: 100%;
           height: 100%;
+          object-fit: cover;
           transition: transform 0.3s;
         }
 

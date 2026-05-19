@@ -51,7 +51,7 @@ public class DeviceControlServiceImpl implements DeviceControlService {
         // 2. 权限校验
         LambdaQueryWrapper<DeviceUserRel> authQuery = new LambdaQueryWrapper<>();
         authQuery.eq(DeviceUserRel::getDeviceId, req.getDeviceId())
-                 .eq(DeviceUserRel::getUserId, req.getUserId());
+                 .eq(DeviceUserRel::getUserId, req.getOperatorId());
         List<DeviceUserRel> authList = deviceUserRelService.list(authQuery);
 
         boolean hasAuth = false;
@@ -73,7 +73,7 @@ public class DeviceControlServiceImpl implements DeviceControlService {
 
         if (!hasAuth) {
             // 记录无权开锁的异常日志
-            saveLog(device.getId(), 2, "unlock_failed", req.getUserId(), "{\"reason\":\"No valid authorization\"}");
+            saveLog(device.getId(), 2, "unlock_failed", req.getOperatorId(), "{\"reason\":\"No valid authorization\"}");
             return Result.error(403, "无开锁权限或授权已过期");
         }
 
@@ -81,7 +81,7 @@ public class DeviceControlServiceImpl implements DeviceControlService {
         // TODO: 真实场景这里会调用第三方IoT云平台API，并处理异步回调。目前直接默认成功。
         
         // 4. 记录开锁成功日志
-        saveLog(device.getId(), 2, "unlock", req.getUserId(), "{\"method\":\"remote_api\", \"success\":true}");
+        saveLog(device.getId(), 2, "unlock", req.getOperatorId(), "{\"method\":\"remote_api\", \"success\":true}");
 
         return Result.success(true);
     }
@@ -139,6 +139,75 @@ public class DeviceControlServiceImpl implements DeviceControlService {
             }
         }
 
+        return Result.success(true);
+    }
+
+    @Override
+    @Transactional
+    public Result<Boolean> lockDevice(UnlockReqDTO req) {
+        DeviceInfo device = deviceInfoService.getById(req.getDeviceId());
+        if (device == null) {
+            throw new RuntimeException("设备不存在");
+        }
+        if (device.getStatus() == 0) {
+            throw new RuntimeException("设备已经是离线/锁定状态");
+        }
+        
+        // 模拟锁定操作
+        device.setStatus(0); // 设为离线/锁定状态
+        deviceInfoService.updateById(device);
+        
+        saveLog(req.getDeviceId(), 2, "lock", req.getOperatorId(), "{\"msg\":\"管理员远程锁定设备\"}");
+        return Result.success(true);
+    }
+
+    @Override
+    @Transactional
+    public Result<Boolean> rebootDevice(UnlockReqDTO req) {
+        DeviceInfo device = deviceInfoService.getById(req.getDeviceId());
+        if (device == null) {
+            throw new RuntimeException("设备不存在");
+        }
+        if (device.getStatus() != 1) {
+            throw new RuntimeException("设备不在线，无法下发重启指令");
+        }
+        
+        saveLog(req.getDeviceId(), 2, "reboot", req.getOperatorId(), "{\"msg\":\"下发重启指令\"}");
+        return Result.success(true);
+    }
+
+    @Override
+    @Transactional
+    public Result<Boolean> applyRepair(UnlockReqDTO req) {
+        DeviceInfo device = deviceInfoService.getById(req.getDeviceId());
+        if (device == null) {
+            throw new RuntimeException("设备不存在");
+        }
+        if (device.getStatus() == 2) {
+            throw new RuntimeException("设备已经是故障状态，无需重复报修");
+        }
+        
+        // 标记设备状态为故障
+        device.setStatus(2);
+        deviceInfoService.updateById(device);
+        
+        saveLog(req.getDeviceId(), 2, "repair_apply", req.getOperatorId(), "{\"msg\":\"人工申请维修\"}");
+        
+        LambdaQueryWrapper<MaintenanceTicket> ticketQuery = new LambdaQueryWrapper<>();
+        ticketQuery.eq(MaintenanceTicket::getDeviceId, device.getId())
+                   .in(MaintenanceTicket::getStatus, 0, 1);
+        long count = maintenanceTicketService.count(ticketQuery);
+        
+        if (count == 0) {
+            MaintenanceTicket ticket = new MaintenanceTicket();
+            String dateStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            ticket.setTicketSn("TKT" + dateStr + UUID.randomUUID().toString().substring(0, 4).toUpperCase());
+            ticket.setDeviceId(device.getId());
+            ticket.setFaultDesc("人工报修");
+            ticket.setStatus(0); // 待处理
+            maintenanceTicketService.save(ticket);
+        }
+        
         return Result.success(true);
     }
 

@@ -14,7 +14,7 @@
     <view class="card login-card">
       <view class="form-item">
         <text class="label">账号</text>
-        <input class="input" type="text" v-model="form.username" placeholder="请输入员工号/手机号" placeholder-class="placeholder-style" />
+        <input class="input" type="text" v-model="form.username" placeholder="请输入员工号" placeholder-class="placeholder-style" />
       </view>
       <view class="form-item">
         <text class="label">密码</text>

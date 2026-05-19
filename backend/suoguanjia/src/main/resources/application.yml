@@ -1,5 +1,5 @@
 server:
-  port: 8084
+  port: 8087
   servlet:
     context-path: /api/suoguanjia
 
@@ -21,5 +21,6 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 关闭 SQL 打印，避免前端轮询导致控制台刷屏
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true

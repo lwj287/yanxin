@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
-import { getCourses } from '@/api/index'; // 临时借用课程接口生成模拟数据
+import { getLearningRecords } from '@/api/index';
 
 const records = ref<any[]>([]);
 const totalCourses = ref(0);
@@ -51,22 +51,26 @@ const fetchRecords = async () => {
   if (loading.value) return;
   loading.value = true;
   try {
-    // 这里暂时使用获取课程列表接口模拟用户的学习记录数据
-    const res: any = await getCourses({ current: 1, size: 10 });
-    const courseList = res.records || [];
+    const res: any = await getLearningRecords();
     
-    // 生成模拟学习记录
-    records.value = courseList.slice(0, 5).map((c: any, index: number) => ({
-      id: index + 1,
-      courseId: c.id,
-      courseName: c.title,
-      coverUrl: c.coverUrl,
-      progress: Math.floor(Math.random() * 60) + 40, // 40-100 随机进度
-      lastLearnTime: '2026-04-' + (20 - index) + ' 10:00:00'
-    }));
+    // 映射真实的学习记录数据
+    records.value = (res || []).map((item: any) => {
+      let coverUrl = item.coverUrl;
+      if (coverUrl && coverUrl.startsWith('/api')) {
+        coverUrl = 'http://localhost:8082' + coverUrl;
+      }
+      return {
+        id: item.learnId,
+        courseId: item.courseId,
+        courseName: item.courseName,
+        coverUrl: coverUrl,
+        progress: item.learnProgress || 0,
+        lastLearnTime: item.lastLearnTime
+      };
+    });
     
     totalCourses.value = records.value.length;
-    totalHours.value = Math.floor(totalCourses.value * 2.5);
+    totalHours.value = Math.floor(totalCourses.value * 2.5); // 这里也可以改为对接真实课时
   } catch (e) {
     console.error('获取学习记录失败', e);
   } finally {
@@ -78,7 +82,7 @@ onShow(() => {
   fetchRecords();
 });
 
-const goToCourse = (id: number) => {
+const goToCourse = (id: string) => {
   uni.navigateTo({
     url: `/pages/course/detail?id=${id}`
   });

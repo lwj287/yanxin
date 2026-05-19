@@ -5,7 +5,7 @@ import com.yanxin.recruit.common.base.BaseEntity;
 import lombok.Data;
 
 @Data
-@TableName("resume_info")
+@TableName("resume_delivery_record")
 public class ResumeInfo extends BaseEntity {
     private Long candidateId;
     private Long jobId;

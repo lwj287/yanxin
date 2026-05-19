@@ -26,7 +26,7 @@ public class ServiceOrder {
     private LocalDateTime expectEndTime;
     
     /**
-     * 状态:0-待派单,1-已派单,2-服务中,3-已完成,4-已取消
+     * 状态:0-待派单,1-已派单/待服务,2-服务中,3-已完成,4-已取消
      */
     private Integer status;
     

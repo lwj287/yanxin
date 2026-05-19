@@ -1,9 +1,10 @@
 package com.yanxin.training.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -27,9 +28,18 @@ public class StaffLearning {
     @TableField("learn_status")
     private String learnStatus;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("last_learn_time")
     private LocalDateTime lastLearnTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("complete_time")
     private LocalDateTime completeTime;
+
+    // DTO fields
+    @TableField(exist = false)
+    private String courseName;
+
+    @TableField(exist = false)
+    private String coverUrl;
 }

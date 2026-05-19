@@ -1,18 +1,16 @@
 {
-  "name": "yanxin-candidate-miniapp",
+  "name": "zhaoxianbao",
   "version": "1.0.0",
-  "private": true,
-  "description": "燕鑫招贤宝-求职者端小程序（uni-app）",
   "scripts": {
     "dev:mp-weixin": "uni -p mp-weixin",
     "build:mp-weixin": "uni build -p mp-weixin"
   },
   "dependencies": {
-    "@dcloudio/uni-app": "3.0.0-alpha-5000720260327001",
-    "@dcloudio/uni-mp-weixin": "3.0.0-alpha-5000720260327001"
+    "@dcloudio/uni-app": "3.0.0-3090920231225001",
+    "@dcloudio/uni-mp-weixin": "3.0.0-3090920231225001"
   },
   "devDependencies": {
-    "@dcloudio/vite-plugin-uni": "3.0.0-alpha-5000720260327001",
-    "vite": "5.2.8"
+    "@dcloudio/vite-plugin-uni": "3.0.0-3090920231225001",
+    "vite": "^4.0.0"
   }
 }

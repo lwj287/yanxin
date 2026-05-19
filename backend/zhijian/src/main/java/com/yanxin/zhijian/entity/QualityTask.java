@@ -12,6 +12,7 @@ public class QualityTask {
     private String serviceType;
     private Long staffId; 
     private String staffName; 
+    private Long templateId;
     private String status;
     private BigDecimal aiScore; 
     private BigDecimal manualScore;

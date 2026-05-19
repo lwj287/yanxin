@@ -15,8 +15,19 @@ public class PointRecordController {
 
     @GetMapping("/page")
     public Result<Page<PointRecord>> page(@RequestParam(defaultValue = "1") Integer page,
-                                           @RequestParam(defaultValue = "10") Integer pageSize) {
-        return Result.success(service.page(new Page<>(page, pageSize)));
+                                           @RequestParam(defaultValue = "10") Integer pageSize,
+                                           @RequestHeader(value = "Authorization", required = false) String token) {
+        com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<PointRecord> queryWrapper = new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<>();
+        // MVP阶段解析token获取当前登录的memberId
+        if (token != null && token.startsWith("token_")) {
+            try {
+                Long memberId = Long.parseLong(token.substring(6));
+                queryWrapper.eq(PointRecord::getMemberId, memberId);
+            } catch (Exception ignored) {
+            }
+        }
+        queryWrapper.orderByDesc(PointRecord::getCreateTime);
+        return Result.success(service.page(new Page<>(page, pageSize), queryWrapper));
     }
 
     @PostMapping

@@ -25,7 +25,7 @@ public class DeviceControlController {
      */
     @PostMapping("/unlock")
     public Result<Boolean> remoteUnlock(@RequestBody UnlockReqDTO req) {
-        if (req.getDeviceId() == null || req.getUserId() == null) {
+        if (req.getDeviceId() == null || req.getOperatorId() == null) {
             return Result.error(400, "参数不完整");
         }
         return deviceControlService.remoteUnlock(req);
@@ -40,5 +40,29 @@ public class DeviceControlController {
             return Result.error(400, "参数不完整");
         }
         return deviceControlService.reportStatus(req);
+    }
+
+    /**
+     * 锁定设备 (例如发现异常时，管理员紧急锁定)
+     */
+    @PostMapping("/lock")
+    public Result<Boolean> lockDevice(@RequestBody UnlockReqDTO req) {
+        return deviceControlService.lockDevice(req);
+    }
+
+    /**
+     * 设备重启 (软重启)
+     */
+    @PostMapping("/reboot")
+    public Result<Boolean> rebootDevice(@RequestBody UnlockReqDTO req) {
+        return deviceControlService.rebootDevice(req);
+    }
+
+    /**
+     * 人工申请维修
+     */
+    @PostMapping("/repair")
+    public Result<Boolean> applyRepair(@RequestBody UnlockReqDTO req) {
+        return deviceControlService.applyRepair(req);
     }
 }

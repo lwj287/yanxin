@@ -22,7 +22,7 @@
     {
       "path": "pages/exam/index",
       "style": {
-        "navigationBarTitleText": "考试认证"
+        "navigationBarTitleText": "考试"
       }
     },
     {
@@ -34,7 +34,7 @@
     {
       "path": "pages/cert/index",
       "style": {
-        "navigationBarTitleText": "我的认证"
+        "navigationBarTitleText": "我的证书"
       }
     },
     {
@@ -46,14 +46,33 @@
     {
       "path": "pages/score/index",
       "style": {
-        "navigationBarTitleText": "考试成绩"
+        "navigationBarTitleText": "分数"
       }
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "燕鑫学院",
+    "navigationBarTitleText": "YanXinXueYuan",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#409EFF",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/course/index",
+        "iconPath": "static/tabbar/course.png",
+        "selectedIconPath": "static/tabbar/course_active.png",
+        "text": "课程"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "iconPath": "static/tabbar/profile.png",
+        "selectedIconPath": "static/tabbar/profile_active.png",
+        "text": "我的"
+      }
+    ]
   }
 }

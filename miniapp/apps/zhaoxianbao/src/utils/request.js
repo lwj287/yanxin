@@ -1,6 +1,6 @@
 import { clearToken, getToken } from './auth'
 
-const BASE_URL = 'http://localhost:8080'
+const BASE_URL = 'http://127.0.0.1:8081'
 
 const normalizeGetParams = (data) => {
   if (!data || typeof data !== 'object') return {}

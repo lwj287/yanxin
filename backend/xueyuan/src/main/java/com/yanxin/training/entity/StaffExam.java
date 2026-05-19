@@ -1,9 +1,10 @@
 package com.yanxin.training.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -27,9 +28,17 @@ public class StaffExam {
     @TableField("exam_status")
     private String examStatus;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("exam_time")
     private LocalDateTime examTime;
 
     @TableField("makeup_count")
     private Integer makeupCount;
+
+    // DTO fields
+    @TableField(exist = false)
+    private String examName;
+
+    @TableField(exist = false)
+    private Integer duration;
 }

@@ -1,6 +1,7 @@
 package com.yanxin.suoguanjia.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -16,7 +17,9 @@ public class DeviceUserRel {
     private Long userId;
     private String userName;
     private Integer authType;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime validStartTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime validEndTime;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

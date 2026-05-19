@@ -19,9 +19,9 @@
       <view class="cert-card card" v-for="item in certs" :key="item.id">
         <view class="cert-header">
           <text class="cert-name">{{ item.certName }}</text>
-          <text class="cert-status pass" v-if="item.auditStatus === 1">已通过</text>
-          <text class="cert-status audit" v-else-if="item.auditStatus === 0">待审核</text>
-          <text class="cert-status reject" v-else-if="item.auditStatus === 2">已驳回</text>
+          <text class="cert-status pass" v-if="item.certStatus === '已通过'">已通过</text>
+          <text class="cert-status audit" v-else-if="item.certStatus === '待审核'">待审核</text>
+          <text class="cert-status reject" v-else-if="item.certStatus === '已驳回'">已驳回</text>
         </view>
         <view class="cert-info">
           <view class="info-row">
@@ -30,11 +30,11 @@
           </view>
           <view class="info-row">
             <text class="label">考试成绩</text>
-            <text class="value score">{{ item.score || 90 }}分</text>
+            <text class="value score">{{ item.examScore || 90 }}分</text>
           </view>
           <view class="info-row">
             <text class="label">申请时间</text>
-            <text class="value">{{ item.createTime || '2026-04-20 15:08:43' }}</text>
+            <text class="value">{{ item.applyTime || '2026-04-20 15:08:43' }}</text>
           </view>
         </view>
       </view>
@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
-import { getCerts } from '@/api/index';
+import { getMyCerts } from '@/api/index';
 
 const certLevel = ref(''); 
 const certs = ref<any[]>([]);
@@ -55,15 +55,12 @@ const fetchCerts = async () => {
   if (loading.value) return;
   loading.value = true;
   try {
-    const certRes: any = await getCerts({
-      current: 1,
-      size: 50
-    });
+    const certRes: any = await getMyCerts();
     
-    certs.value = certRes.records || [];
+    certs.value = certRes || [];
     
     // 找到最高/最新通过的认证
-    const passedCerts = certs.value.filter(c => c.auditStatus === 1);
+    const passedCerts = certs.value.filter(c => c.certStatus === '已通过');
     if (passedCerts.length > 0) {
       certLevel.value = passedCerts[0].certName;
     } else {

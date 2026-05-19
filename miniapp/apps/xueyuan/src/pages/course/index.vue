@@ -12,58 +12,29 @@
     </view>
 
     <view class="list-container">
-      <view class="data-board card" v-if="isLogin">
-        <view class="data-item">
-          <text class="number">12</text>
-          <text class="label">已学课程</text>
-        </view>
-        <view class="divider"></view>
-        <view class="data-item">
-          <text class="number">35</text>
-          <text class="label">累计学时(h)</text>
-        </view>
-        <view class="divider"></view>
-        <view class="data-item">
-          <text class="number">2</text>
-          <text class="label">获得证书</text>
-        </view>
-      </view>
-
-      <view v-if="!courses.length" class="empty">暂无相关课程</view>
+      <view v-if="!courses.length" class="empty">暂无相关课程</view>       
 
       <view class="course-list">
         <view class="course-card" v-for="item in courses" :key="item.id" @click="goToCourse(item.id)">
-          <image class="cover" :src="item.coverUrl || 'https://via.placeholder.com/300x150?text=Course'" mode="aspectFill" />
+          <video v-if="item.coverUrl" class="cover" :src="item.coverUrl" :controls="false" :show-center-play-btn="false" object-fit="cover"></video>
+          <view v-else class="cover" style="display: flex; align-items: center; justify-content: center; color: #909399; font-size: 14px;">
+            <text>暂无视频</text>
+          </view>
           <view class="info">
             <text class="title">{{ item.title }}</text>
             <view class="tags">
               <text class="tag">{{ item.category }}</text>
-              <text class="tag level" v-if="item.level">{{ item.level }}</text>
+              <text class="tag level" v-if="item.level">{{ item.level }}</text> 
             </view>
             <text class="desc">{{ item.description }}</text>
           </view>
         </view>
       </view>
 
-      <view class="pager" v-if="courses.length > 0 || queryParams.current > 1">
+      <view class="pager" v-if="courses.length > 0 || queryParams.current > 1"> 
         <button class="pager-btn" :disabled="queryParams.current <= 1" @click="prev">上一页</button>
         <text class="pager-text">{{ queryParams.current }}</text>
         <button class="pager-btn" :disabled="!hasMore" @click="next">下一页</button>
-      </view>
-    </view>
-
-    <view class="tabbar">
-      <view class="tab-item active">
-        <view class="tab-icon">
-          <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzQwOWVmZiIgc3Ryb2tlPSIjNDA5ZWZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIyIiB5PSI3IiB3aWR0aD0iMjAiIGhlaWdodD0iMTQiIHJ4PSIyIiByeT0iMiI+PC9yZWN0PjxwYXRoIGQ9Ik0xNiAyMVY1YTIgMiAwIDAgMC0yLTJoLTRhMiAyIDAgMCAwLTIgMnYxNiI+PC9wYXRoPjwvc3ZnPg==" style="width: 48rpx; height: 48rpx;" mode="aspectFit"></image>
-        </view>
-        <view class="tab-text">课程</view>
-      </view>
-      <view class="tab-item" @click="goMy">
-        <view class="tab-icon">
-          <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOTk5OTk5IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdi0yYTQgNCAwIDAgMC00LTRIOGE0IDQgMCAwIDAtNCA0djIiPjwvcGF0aD48Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiPjwvY2lyY2xlPjwvc3ZnPg==" style="width: 48rpx; height: 48rpx;" mode="aspectFit"></image>
-        </view>
-        <view class="tab-text">我的</view>
       </view>
     </view>
 
@@ -94,7 +65,7 @@ const fetchCourses = async (reset = false) => {
     hasMore.value = true;
   }
   if (!hasMore.value || loading.value) return;
-  
+
   loading.value = true;
   try {
     const params = { ...queryParams.value };
@@ -103,15 +74,23 @@ const fetchCourses = async (reset = false) => {
     }
     const res: any = await getCourses(params);
     const newRecords = res.records || [];
-    
-    // 映射分类和等级
-    const categoryMap: Record<number, string> = { 1: '保洁服务', 2: '保姆服务' };
-    const levelMap: Record<number, string> = { 1: '初级', 2: '中级', 3: '高级' };
-    const mappedRecords = newRecords.map((item: any) => ({
-      ...item,
-      category: categoryMap[item.categoryId] || '其他',
-      level: levelMap[item.certLevel] || '初级'
-    }));
+
+    const mappedRecords = newRecords.map((item: any) => {
+      // 处理相对路径，拼接完整的后端地址
+      let videoUrl = item.videoUrl;
+      if (videoUrl && videoUrl.startsWith('/api')) {
+        videoUrl = 'http://localhost:8082' + videoUrl;
+      }
+      return {
+        id: item.courseId,
+        title: item.courseName,
+        category: item.courseType || '其他',
+        level: item.difficulty || '初级',
+        description: item.courseContent,
+        coverUrl: videoUrl,
+        createTime: item.createTime
+      };
+    });
 
     courses.value = reset ? mappedRecords : [...courses.value, ...mappedRecords];
     if (newRecords.length < queryParams.value.size) {
@@ -153,7 +132,7 @@ onShow(async () => {
     } else {
       userInfo.value = {};
     }
-    
+
     fetchCourses(true);
   } catch (e) {
     console.error(e);
@@ -164,7 +143,7 @@ const goMy = () => {
   uni.redirectTo({ url: '/pages/profile/index' })
 }
 
-const goToCourse = (id: number) => {
+const goToCourse = (id: string) => {
   uni.navigateTo({
     url: `/pages/course/detail?id=${id}`
   });
@@ -201,7 +180,7 @@ const goToCourse = (id: number) => {
   background: #f5f7fa;
   padding: 4px 12px 4px 4px;
   border-radius: 20px;
-  
+
   .mini-avatar {
     width: 24px;
     height: 24px;
@@ -248,42 +227,6 @@ const goToCourse = (id: number) => {
   padding: 12px 16px;
 }
 
-.data-board {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 16px;
-  background: linear-gradient(135deg, #409EFF 0%, #3a8ee6 100%);
-  color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.2);
-  margin-bottom: 16px;
-  
-  .data-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-    .number {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-    
-    .label {
-      font-size: 12px;
-      opacity: 0.9;
-    }
-  }
-  
-  .divider {
-    width: 1px;
-    height: 24px;
-    background-color: rgba(255, 255, 255, 0.3);
-  }
-}
-
 .empty {
   text-align: center;
   color: #909399;
@@ -303,16 +246,16 @@ const goToCourse = (id: number) => {
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  
+
   .cover {
     width: 100%;
     height: 140px;
     background-color: #ebeef5;
   }
-  
+
   .info {
     padding: 16px;
-    
+
     .title {
       font-size: 16px;
       font-weight: 600;
@@ -320,26 +263,26 @@ const goToCourse = (id: number) => {
       margin-bottom: 8px;
       display: block;
     }
-    
+
     .tags {
       display: flex;
       gap: 8px;
       margin-bottom: 8px;
-      
+
       .tag {
         font-size: 12px;
         color: #409EFF;
         background-color: #ecf5ff;
         padding: 4px 8px;
         border-radius: 4px;
-        
+
         &.level {
           color: #E6A23C;
           background-color: #fdf6ec;
         }
       }
     }
-    
+
     .desc {
       font-size: 13px;
       color: #909399;

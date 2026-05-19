@@ -29,8 +29,8 @@ public class Course {
     @TableField("course_content")
     private String courseContent;
 
-    @TableField("course_cover")
-    private String courseCover;
+    @TableField("video_url")
+    private String videoUrl;
 
     @TableField("create_time")
     private LocalDateTime createTime;

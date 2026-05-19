@@ -51,8 +51,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
+import { getExamRecords } from '@/api/index';
 
 const exams = ref<any[]>([]);
+const loading = ref(false);
 
 const averageScore = computed(() => {
   if (exams.value.length === 0) return 0;
@@ -60,38 +62,28 @@ const averageScore = computed(() => {
   return Math.round(total / exams.value.length);
 });
 
+const fetchExams = async () => {
+  if (loading.value) return;
+  loading.value = true;
+  try {
+    const res: any = await getExamRecords();
+    
+    exams.value = (res || []).map((item: any) => ({
+      id: item.staffExamId,
+      examName: item.examName,
+      score: item.examScore || 0,
+      duration: item.duration || 60,
+      submitTime: item.examTime
+    }));
+  } catch (e) {
+    console.error('获取考试记录失败', e);
+  } finally {
+    loading.value = false;
+  }
+};
+
 onShow(() => {
-  // 生成模拟考试成绩记录
-  exams.value = [
-    {
-      id: 1,
-      examName: '保洁服务高级认证考试',
-      score: 92,
-      duration: 45,
-      submitTime: '2026-04-18 14:30:00'
-    },
-    {
-      id: 2,
-      examName: '岗前必修安全知识测验',
-      score: 100,
-      duration: 20,
-      submitTime: '2026-04-10 09:15:00'
-    },
-    {
-      id: 3,
-      examName: '保姆服务中级认证考试',
-      score: 55,
-      duration: 60,
-      submitTime: '2026-03-25 16:40:00'
-    },
-    {
-      id: 4,
-      examName: '保姆服务初级认证考试',
-      score: 88,
-      duration: 40,
-      submitTime: '2026-03-10 11:20:00'
-    }
-  ];
+  fetchExams();
 });
 </script>
 
