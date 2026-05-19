@@ -52,7 +52,7 @@ const handleSendSms = async () => {
   
   try {
     const res: any = await sendSms({ phone: form.value.phone });
-    uni.showToast({ title: `发送成功(测试验证码:${res})`, icon: 'none', duration: 3000 });
+    uni.showToast({ title: `发送成功(验证码:${res})`, icon: 'none', duration: 3000 });
     
     // 开始倒计时
     countdown.value = 60;

@@ -97,7 +97,7 @@ const startAnalysis = async () => {
     // 1. 创建任务
     const taskRes: any = await createQualityTask({
       serviceType: '日常保洁',
-      staffName: '小程序测试人员'
+      staffName: '张三'
     })
     
     if (!taskRes || !taskRes.id) {

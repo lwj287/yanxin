@@ -70,7 +70,7 @@ public class QualityTaskController {
             task.setStatus("UPLOADED"); // 默认待审核
         }
         if (task.getStaffName() == null) {
-            task.setStaffName("小程序测试人员");
+            task.setStaffName("张三");
         }
         if (task.getServiceType() == null) {
             task.setServiceType("日常保洁");

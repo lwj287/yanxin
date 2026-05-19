@@ -1,6 +1,6 @@
 import { request } from '../utils/request';
 
-// 登录 (Mock)
+// 登录
 export const login = (phone: string) => {
   return request({
     url: `/zhipaidan/staff/phone/${phone}`,

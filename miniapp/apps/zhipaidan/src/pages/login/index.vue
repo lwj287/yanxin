@@ -19,7 +19,7 @@
       <view class="form-item">
         <text class="label">验证码</text>
         <view class="code-input-wrap">
-          <input class="input code-input" type="text" v-model="form.password" placeholder="测试环境请任意输入" placeholder-class="placeholder-style" />
+          <input class="input code-input" type="text" v-model="form.password" placeholder="请任意输入" placeholder-class="placeholder-style" />
           <text class="get-code-text" @click="handleGetCode">{{ codeText }}</text>
         </view>
       </view>
@@ -51,7 +51,7 @@ const handleGetCode = () => {
   
   // 模拟发送验证码
   uni.showToast({ title: '验证码 123456 已发送', icon: 'none' });
-  form.value.password = '123456'; // 自动帮用户填上，方便测试
+  form.value.password = '123456'; // 自动帮用户填上
   
   isCounting.value = true;
   let count = 60;

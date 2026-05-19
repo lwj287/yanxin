@@ -232,7 +232,7 @@ const parseRequirements = (reqStr: string) => {
   if (!reqStr) return []
   try {
     const parsed = JSON.parse(reqStr)
-    // 如果解析出来是对象数组（如 init.sql 中的测试数据），提取 name 字段
+    // 如果解析出来是对象数组（如 init.sql 中的数据），提取 name 字段
     if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'object') {
       return parsed.map((item: any) => item.name || item.desc || '未命名要求')
     }

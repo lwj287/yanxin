@@ -39,7 +39,7 @@ public class MemberController {
         // 模拟生成 6 位验证码
         String code = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
         SMS_CACHE.put(phone, code);
-        // 实际开发中这里会调用阿里云/腾讯云短信服务发送，现在直接返回给前端展示（方便测试）
+        // 实际开发中这里会调用阿里云/腾讯云短信服务发送，现在直接返回给前端展示
         return Result.success(code);
     }
 

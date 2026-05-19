@@ -134,7 +134,7 @@ const handleReset = () => {
 
 const handleUnlock = async (row: DeviceInfo) => {
   try {
-    await remoteUnlock(row.id, 104) // Mock user 104 (赵经理)
+    await remoteUnlock(row.id, 104) // user 104 (赵经理)
     ElMessage.success('开锁指令下发成功')
     setTimeout(() => fetchData(false), 1000)
   } catch (e: any) {

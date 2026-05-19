@@ -248,7 +248,7 @@ const loadData = async () => {
     // 对接后端数据
     tableData.value = res.records.map((item: any) => ({
       ...item,
-      // 后端只返回基础字段，这里通过 mock 填充部分展示字段（实际业务需关联其他表）
+      // 后端只返回基础字段
       type: 1, 
       createTime: item.createTime.replace('T', ' ')
     }))
